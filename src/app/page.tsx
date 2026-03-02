@@ -5,6 +5,7 @@ import Searchbar from "@/components/Searchbar";
 import { getCategories } from "@/lib/api";
 import CategoryGrid from "@/components/CategoryGrid";
 
+
 export default async function Home() {
 
 
