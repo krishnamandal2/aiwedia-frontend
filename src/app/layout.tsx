@@ -12,8 +12,8 @@ export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: {
-    default: "onewbsolution",
-    template: "%s | OneWebSolution",
+    default: "aiwedia",
+    template: "%s | aiwedia",
   },
   description: "Best tools & resources for developers and creators",
   keywords: ["tools", "developer tools", "AI tools","vibe coding","ai","top ai"],
