@@ -6,7 +6,7 @@ const Disclaimer = () => {
       </h1>
 
       <p className="text-gray-700 mb-4">
-        This website is created and maintained by <strong>Krishna</strong>,
+        This website is created and maintained by <strong>Aiwedia team</strong>,
         a software engineer, with the purpose of helping users easily
         discover, manage, and access multiple websites and online tools
         from a single platform.

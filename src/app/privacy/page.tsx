@@ -11,7 +11,7 @@ const Privacy = () => {
         </h1>
 
         <p className="text-gray-700 mb-6">
-          At <span className="font-semibold">OneWebSolution</span>, your privacy is important. This page explains how we collect, use, and protect your personal data.
+          At <span className="font-semibold">AiWedia</span>, your privacy is important. This page explains how we collect, use, and protect your personal data.
         </p>
 
         <section className="mb-6">
@@ -36,7 +36,7 @@ const Privacy = () => {
         </section>
 
         <p className="text-gray-500 text-sm text-center mt-12">
-          © {currentYear} OneWebSolution. All rights reserved.
+          © {currentYear} AiWedia. All rights reserved.
         </p>
       </div>
     </div>

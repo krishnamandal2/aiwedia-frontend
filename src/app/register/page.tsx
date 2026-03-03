@@ -67,7 +67,7 @@ export default function RegisterPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      toast.success("Welcome to OneWebSolution!");
+      toast.success("Welcome to AiWedia!");
      setTimeout(() => {
      window.location.href = "/";
       }, 1000);
@@ -108,7 +108,7 @@ export default function RegisterPage() {
             <p className="text-slate-500 mt-2 text-sm sm:text-base">
               Join{" "}
               <span className="text-indigo-600 font-semibold">
-                OneWebSolution
+                AiWedia
               </span>
             </p>
           </div>

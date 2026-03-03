@@ -11,7 +11,7 @@ const Cookies = () => {
         </h1>
 
         <p className="text-gray-700 mb-6">
-          At <span className="font-semibold">OneWebSolution</span>, we use cookies to improve your experience. This page explains how we use and manage cookies.
+          At <span className="font-semibold">AiWedia</span>, we use cookies to improve your experience. This page explains how we use and manage cookies.
         </p>
 
         <section className="mb-6">
@@ -36,7 +36,7 @@ const Cookies = () => {
         </section>
 
         <p className="text-gray-500 text-sm text-center mt-12">
-          © {currentYear} OneWebSolution. All rights reserved.
+          © {currentYear} Aiwedia. All rights reserved.
         </p>
       </div>
     </div>

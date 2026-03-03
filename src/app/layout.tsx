@@ -11,25 +11,80 @@ const inter = Inter({ subsets: ["latin"] });
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aiwedia.com"),
+
   title: {
-    default: "aiwedia",
-    template: "%s | aiwedia",
+    default: "Aiwedia - Best AI Tools, Developer Resources & Tech News",
+    template: "%s | Aiwedia",
   },
-  description: "Best tools & resources for developers and creators",
-  keywords: ["tools", "developer tools", "AI tools","vibe coding","ai","top ai"],
+
+  description:
+    "Discover the best AI tools, developer resources, gaming updates, SEO tools, PDF tools and trending tech news on Aiwedia.",
+
+  keywords: [
+    "AI tools",
+    "Developer tools",
+    "Vibe coding",
+    "Top AI",
+    "Gaming news",
+    "SEO tools",
+    "PDF tools",
+    "Tech news",
+    "Dating sites",
+  ],
+
   authors: [{ name: "Krishna" }],
-  robots: "index, follow",
+  creator: "Aiwedia",
+  publisher: "Aiwedia",
 
-  /** ✅ BROWSER TAB ICON */
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  alternates: {
+    canonical: "https://aiwedia.com",
+  },
+
   icons: {
-    icon: "/favicon.ico",
-    
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
 
-  /** ✅ OPEN GRAPH (SOCIAL PREVIEW) */
   openGraph: {
-   
+    type: "website",
+    url: "https://aiwedia.com",
+    title: "Aiwedia - Best AI Tools & Developer Resources",
+    description:
+      "Explore top AI tools, developer utilities, SEO tools, gaming content and trending tech updates.",
+    siteName: "Aiwedia",
+    images: [
+      {
+        url: "/og-image.png", 
+        width: 1200,
+        height: 630,
+        alt: "Aiwedia Preview",
+      },
+    ],
   },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Aiwedia - Best AI Tools & Developer Resources",
+    description:
+      "Explore top AI tools, developer utilities, SEO tools, gaming content and trending tech updates.",
+    images: ["/og-image.png"],
+  },
+
+  themeColor: "#4f46e5",
 };
 
 export default function RootLayout({
@@ -40,6 +95,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Aiwedia",
+      url: "https://aiwedia.com",
+      sameAs: [
+        "https://x.com/aiwedia1",
+        
+      ]
+    }),
+  }}
+/>
         <Header />
         <main>{children}</main>
         <Footer />

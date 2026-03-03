@@ -14,7 +14,9 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="md:col-span-5 space-y-8">
             <Link href="/"prefetch={false}  className="text-2xl font-black tracking-tighter text-white flex items-center gap-3">
-              <span>ONEWEB<span className="text-indigo-600">SOLUTION</span></span>
+              <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]">
+    AiWedia
+  </span>
             </Link>
 
             <p className="text-slate-400 text-lg leading-relaxed max-w-sm">
@@ -83,7 +85,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs text-slate-500 font-medium">
-            © {currentYear} OneWebSolution. Empowering the next web.
+            © {currentYear} AiWedia Empowering the next web.
           </p>
           
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">

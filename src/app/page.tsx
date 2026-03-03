@@ -40,7 +40,7 @@ const categories = data.categories;
   <span className="block font-semibold text-slate-900 md:inline">
     Access the web, simplified.
   </span>{" "}
-  Onewebsolution helps you quickly access and navigate any website from a single place.
+  AiWedia helps you quickly access and navigate any website from a single place.
 </p>
 
           <div className="max-w-2xl mx-auto">
