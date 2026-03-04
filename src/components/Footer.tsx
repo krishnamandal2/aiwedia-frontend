@@ -24,10 +24,10 @@ const Footer = () => {
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <a href="mailto:contact@onewebsolution.com" 
+              <a href="mailto:contactaiwedia@gmail.com" 
                 className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-900/50 border border-slate-800 hover:border-[#eb442c] hover:text-white transition-all text-sm font-bold group">
                 <Mail size={18} className="text-[#eb442c]" />
-               websonesolutions@gmail.com
+                contactaiwedia@gmail.com
               </a>
             </div>
           </div>
@@ -71,7 +71,7 @@ const Footer = () => {
                 Follow Us
               </h4>
               <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-[#eb442c] hover:text-[#eb442c] transition-all">
+                <a href="https://x.com/aiwedia1" className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-[#eb442c] hover:text-[#eb442c] transition-all">
                   <Twitter size={18} />
                 </a>
                 <a href="#" className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-[#eb442c] hover:text-[#eb442c] transition-all">

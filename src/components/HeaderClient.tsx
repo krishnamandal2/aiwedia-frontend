@@ -16,9 +16,9 @@ export default function HeaderClient({
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname(); // 2. Initialize the hook
+  const pathname = usePathname(); 
 
-  // 3. Automatically close menu when the route/path changes
+ 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
@@ -43,8 +43,8 @@ export default function HeaderClient({
       {/* Top Bar */}
       <div className="hidden lg:flex justify-between items-center px-12 py-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50/50">
         <div className="flex gap-6">
-          <a href="mailto:contact@oneweb.com" className="flex items-center gap-2 hover:text-indigo-600">
-            <Mail size={12} className="text-indigo-600" /> websonesolutions@gmail.com
+          <a href="mailto: contactaiwedia@gmail.com" className="flex items-center gap-2 hover:text-indigo-600">
+            <Mail size={12} className="text-indigo-600" /> contactaiwedia@gmail.com
           </a>
           <span className="hidden md:flex items-center gap-2 hover:text-indigo-600">
             <Phone size={12} className="text-indigo-600" /> +91 98185 21688
@@ -52,7 +52,13 @@ export default function HeaderClient({
         </div>
         <div className="flex gap-4">
           <Github size={14} className="hover:text-indigo-600 cursor-pointer" />
-          <Twitter size={14} className="hover:text-indigo-600 cursor-pointer" />
+          <a
+          href="https://x.com/aiwedia1"
+         target="_blank"
+         rel="noopener noreferrer"
+           >
+     <Twitter size={14} className="hover:text-indigo-600 cursor-pointer" />
+    </a>
           <Link href="/source" className="hover:text-indigo-600 text-xs">Source</Link>
         </div>
       </div>
@@ -230,7 +236,7 @@ export default function HeaderClient({
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Contact Us</p>
               
               <a 
-                href="mailto:contact@oneweb.com" 
+                href="mailto: contactaiwedia@gmail.com" 
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition-colors"
               >
                 <div className="flex items-center justify-center w-10 h-10 bg-indigo-50 rounded-lg">
@@ -238,7 +244,7 @@ export default function HeaderClient({
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">Email Us</p>
-                  <p className="text-xs text-slate-500">websonesolutions@gmail.com</p>
+                  <p className="text-xs text-slate-500">contactaiwedia@gmail.com</p>
                 </div>
               </a>
               
