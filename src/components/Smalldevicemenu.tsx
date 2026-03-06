@@ -40,14 +40,14 @@ export default function Smalldevicemenu({
   }, [categories, query]);
 
  const handleNavigation = (path: string) => {
-  setOpen(false);   // close bottom sheet
-  closeMenu?.();    // close header drawer safely
+  setOpen(false);   
+  closeMenu?.();    
 
   setTimeout(() => {
     router.push(path);
     setQuery("");
     window.scrollTo({ top: 0 });
-    setQuery(""); // reset search
+    setQuery(""); 
   }, 500);
 };
 

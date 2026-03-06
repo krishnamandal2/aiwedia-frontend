@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API = "http://localhost:5000";
+
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function AdminLogin() {
 
     try {
       // 🔐 LOGIN
-      const res = await fetch(`${API}/api/admin/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -38,7 +38,7 @@ export default function AdminLogin() {
       }
 
       // ✅ VERIFY SESSION
-      const verify = await fetch(`${API}/api/admin/verify`, {
+      const verify = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify`, {
         credentials: "include",
       });
 
