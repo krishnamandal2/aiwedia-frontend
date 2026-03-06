@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
 
-  themeColor: "#4f46e5",
+  
 };
 
 export default function RootLayout({
