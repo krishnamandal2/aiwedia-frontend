@@ -27,7 +27,7 @@ export default function ProfileMenu() {
 
   const logout = () => {
     localStorage.clear();
-    window.location.reload(); // Safer than a hard href redirect for SPA state
+    window.location.reload(); 
   };
 
   if (!user) {

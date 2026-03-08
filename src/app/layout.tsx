@@ -10,8 +10,14 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-static";
 
+
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://aiwedia.com"),
+
+   verification: {
+    google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M",
+  },
 
   title: {
     default: "Aiwedia - Best AI Tools, Developer Resources & Tech News",
