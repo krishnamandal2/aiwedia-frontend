@@ -115,7 +115,7 @@ export default function MobileHeader({
 
               <div className="flex items-center gap-3">
                 <Phone size={18} />
-                +91 98185 21688
+                 +91 9783152203
               </div>
 
             </div>
