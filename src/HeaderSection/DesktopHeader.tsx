@@ -44,7 +44,7 @@ export default function DesktopHeader({
 
           <span className="flex items-center gap-2 hover:text-indigo-600">
             <Phone size={12} className="text-indigo-600" />
-            +91 9818521688
+            +91 9783152203
           </span>
         </div>
 
