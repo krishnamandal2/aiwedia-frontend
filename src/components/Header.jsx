@@ -1,5 +1,5 @@
 import HeaderClient from "./HeaderClient";
-import MegaExploreClient from "@/components/MegaExploreClient";
+import MegaExploreClient from "@/megamenu/MegaExploreClient";
 import Smalldevicemenu from "@/components/Smalldevicemenu";
 import { getMenuCategories } from "@/lib/api";
 

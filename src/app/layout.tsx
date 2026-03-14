@@ -4,7 +4,8 @@ import "@/app/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
-
+import Chatbot from "@/Aichartbot/Chatbot";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,17 +28,41 @@ export const metadata: Metadata = {
   description:
     "Discover the best AI tools, developer resources, gaming updates, SEO tools, PDF tools and trending tech news on Aiwedia.",
 
-  keywords: [
-    "AI tools",
-    "Developer tools",
-    "Vibe coding",
-    "Top AI",
-    "Gaming news",
-    "SEO tools",
-    "PDF tools",
-    "Tech news",
-    "Dating sites",
-  ],
+keywords: [
+  "best AI tools 2026",
+  "top AI tools for developers",
+  "AI tools directory",
+  "free AI tools for productivity",
+  "AI tools for coding",
+  "AI tools for startups",
+
+  "AI image generator",
+  "free AI image generator",
+  "AI art generator online",
+  "text to image AI tools",
+
+  "AI background remover",
+  "remove image background online",
+  "free background remover tool",
+
+  "PDF editor online",
+  "free PDF editing tools",
+  "merge PDF files online",
+  "compress PDF online",
+
+  "best SEO tools for bloggers",
+  "developer productivity tools",
+  "coding tools for developers",
+
+  "gaming news",
+  "latest gaming updates",
+  "gaming industry news",
+
+  "latest tech news",
+  "AI technology news",
+  "new AI tools released",
+  "Online games",
+],
 
   authors: [{ name: "Krishna" }],
   creator: "Aiwedia",
@@ -120,7 +145,11 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <Providers />
+        {/* Floating Components */}
+        <ScrollToTopButton />
+        <Chatbot />
       </body>
+      
     </html>
   );
 }

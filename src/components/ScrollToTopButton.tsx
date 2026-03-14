@@ -7,9 +7,18 @@ export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => {
+      const footer = document.querySelector("footer");
+
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        setVisible(rect.top < window.innerHeight);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (!visible) return null;
@@ -19,23 +28,19 @@ export default function ScrollToTopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Scroll to top"
       className="
-        fixed bottom-5 right-5 z-50
-        flex items-center justify-center
-        bg-slate-900 hover:bg-[#eb442c]
-        text-white border border-slate-800
-        shadow-lg transition-all duration-300
-
-        /* Mobile */
-        w-11 h-11 rounded-full
-
-        /* Desktop */
-        md:w-auto md:h-auto md:px-4 md:py-2 md:rounded-full md:gap-2
+        fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000]
+        flex items-center gap-2
+        px-5 py-2
+        bg-white text-black
+        rounded-full
+        shadow-xl border border-gray-200
+        hover:scale-105 hover:shadow-2xl
+        transition-all duration-300
       "
     >
       <ArrowUp size={16} />
 
-      {/* Text hidden on mobile */}
-      <span className="hidden md:inline text-[10px] font-black uppercase tracking-widest">
+      <span className="text-xs font-semibold tracking-wide">
         Back to top
       </span>
     </button>

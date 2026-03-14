@@ -38,3 +38,21 @@ body {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
 }
+.tiptap h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.tiptap p {
+  margin: 0.5rem 0;
+}
+
+.tiptap ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}

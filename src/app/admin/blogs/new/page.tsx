@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import BlogEditor from "@/components/BlogEditor";
-import { textToContentArray } from "@/utils/textToContentArray";
+import BlogEditor from "@/blogscms/BlogEditor";
+import { cleanHtml } from "@/utils/cleanHtml";
 
 const API = process.env.NEXT_PUBLIC_API_URL 
 
@@ -40,19 +40,21 @@ export default function NewBlog() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API}/api/blogs`, {
+       const cleanedContent = cleanHtml(content);
+
+        const res = await fetch(`${API}/api/blogs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          title,
-          slug: generateSlug(title),
-          summary,
-          image,
-          status,
-          date: new Date().toISOString(),
-          content: textToContentArray(content), // ✅ convert plain text
-        }),
+  title,
+  slug: generateSlug(title),
+  summary,
+  image,
+  status,
+  date: new Date().toISOString(),
+  content: cleanedContent, 
+}),
       });
 
       const data = await res.json();
@@ -109,7 +111,7 @@ export default function NewBlog() {
         </select>
 
         <div className="flex gap-3">
-          <button onClick={() => router.push("/admin/blogs")} className="px-4 py-2 border rounded">
+          <button onClick={() => router.push("/admin/dashboard")} className="px-4 py-2 border rounded">
             Cancel
           </button>
 

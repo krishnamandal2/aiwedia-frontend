@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import BlogEditor from "@/components/BlogEditor";
-import { textToContentArray } from "@/utils/textToContentArray";
+import BlogEditor from "@/blogscms/BlogEditor";
+import { cleanHtml } from "@/utils/cleanHtml";
 
 const API = process.env.NEXT_PUBLIC_API_URL 
 
@@ -19,6 +19,7 @@ export default function EditBlogPage() {
   const [status, setStatus] = useState("draft");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  
 
   useEffect(() => {
     if (!id) return;
@@ -37,11 +38,10 @@ export default function EditBlogPage() {
         setSummary(blog.summary);
         setImage(blog.image || "");
         setStatus(blog.status || "draft");
-
-        // Convert backend content[] to plain-text
-        setContent(blog.content.map((c: any) => c.text).join("\n\n"));
+       setContent(blog.content || "");
 
         setLoading(false);
+        
       } catch (err) {
         alert("Something went wrong");
         router.push("/admin/dashboard");
@@ -52,13 +52,17 @@ export default function EditBlogPage() {
   }, [id, router]);
 
   const updateBlog = async () => {
+    
     if (!title || !summary || !content) {
       alert("Please fill all required fields");
       return;
     }
 
     setSaving(true);
-
+     
+    
+  const cleanedContent = cleanHtml(content);
+  
     const res = await fetch(`${API}/api/blogs/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -69,7 +73,7 @@ export default function EditBlogPage() {
         summary,
         image,
         status,
-        content: textToContentArray(content),
+        content: cleanedContent, 
       }),
     });
 
@@ -121,7 +125,7 @@ export default function EditBlogPage() {
         </select>
 
         <div className="flex gap-3">
-          <button onClick={() => router.push("/admin/blogs")} className="px-4 py-2 border rounded">
+          <button onClick={() => router.push("/admin/dashboard")} className="px-4 py-2 border rounded">
             Cancel
           </button>
           <button

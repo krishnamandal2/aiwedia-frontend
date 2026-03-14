@@ -1,4 +1,4 @@
-import BlogCard from "@/components/BlogCard";
+import BlogCard from "@/blogscms/BlogCard";
 
 type Blog = {
  
@@ -13,7 +13,7 @@ type Blog = {
 async function getBlogs(): Promise<Blog[]> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public`,
-    { next: { revalidate: 3600 } } // ISR: revalidate every 1 hour
+     { cache: "no-store" }
   );
 
   if (!res.ok) return [];
