@@ -7,9 +7,9 @@ import Providers from "@/components/Providers";
 import Chatbot from "@/Aichartbot/Chatbot";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-export const dynamic = "force-static";
+export const revalidate = 60;
 
 
 
@@ -29,39 +29,14 @@ export const metadata: Metadata = {
     "Discover the best AI tools, developer resources, gaming updates, SEO tools, PDF tools and trending tech news on Aiwedia.",
 
 keywords: [
-  "best AI tools 2026",
-  "top AI tools for developers",
-  "AI tools directory",
-  "free AI tools for productivity",
-  "AI tools for coding",
-  "AI tools for startups",
-
-  "AI image generator",
-  "free AI image generator",
-  "AI art generator online",
-  "text to image AI tools",
-
-  "AI background remover",
-  "remove image background online",
-  "free background remover tool",
-
-  "PDF editor online",
-  "free PDF editing tools",
-  "merge PDF files online",
-  "compress PDF online",
-
-  "best SEO tools for bloggers",
-  "developer productivity tools",
-  "coding tools for developers",
-
-  "gaming news",
-  "latest gaming updates",
-  "gaming industry news",
-
-  "latest tech news",
-  "AI technology news",
-  "new AI tools released",
-  "Online games",
+    "best AI tools 2026",
+    "AI tools directory",
+    "free AI tools",
+    "AI tools for developers",
+    "AI image generator",
+    "PDF tools online",
+    "SEO tools for bloggers",
+    "latest tech news",
 ],
 
   authors: [{ name: "Krishna" }],
@@ -80,9 +55,7 @@ keywords: [
     },
   },
 
-  alternates: {
-    canonical: "https://aiwedia.com",
-  },
+ 
 
   icons: {
     icon: "/favicon.png",
@@ -126,15 +99,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+
         <script
   type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
+   dangerouslySetInnerHTML={{
+     __html: JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "Aiwedia",
-      url: "https://aiwedia.com",
-      sameAs: [
+       name: "Aiwedia",
+       url: "https://aiwedia.com",
+       sameAs: [
         "https://x.com/aiwedia1",
         
       ]

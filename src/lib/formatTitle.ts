@@ -43,12 +43,15 @@ export function formatCategoryTitle(value: string) {
     informationsite: "Information Websites",
     tradingsites: "Trading Platforms",
     hotcall: "Hot Call Platforms",
-    indiagovsites: "Indian Government Websites",
+    Indiangovernmentsites: "Indian Government Websites",
     governmentexam: "Government Exam Portals",
     wedding: "Matrimony Websites",
     logoandfavicondesign: "Logo & Favicon Design",
     onlinegames: "Online Games",
-    imagebackgroundremover: "Background Image Remover",
+     imagebackgroundremover: "Background Image Remover",
+     AitoolsforHealth:"Ai tools For health and fitness",
+     aiinhealthcare:"Ai In HealthCare"
+
   };
 
   if (specialCases[normalized]) {

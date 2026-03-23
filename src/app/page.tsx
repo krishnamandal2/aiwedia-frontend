@@ -22,7 +22,7 @@ export default async function Home() {
       <HeroSection />
 
       {/* ================= CATEGORIES ================= */}
-      <section className="pb-32">
+      <section className="pb-6">
         <div className="max-w-7xl mx-auto px-6">
 
           <div className="mb-12 border-b border-slate-100 pb-8">

@@ -206,7 +206,7 @@ const Footer = () => {
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   <a
-                    href="https://twitter.com/aiwedia"
+                    href="https://x.com/aiwedia1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 hover:bg-slate-800 transition group"
@@ -222,17 +222,7 @@ const Footer = () => {
                     aria-label="LinkedIn"
                   >
                     <LinkedinIcon size={18} />
-                  </a>
-                  <a
-                href="https://github.com/aiwedia"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 hover:bg-slate-800 transition group"
-                aria-label="GitHub"
-           >
-             <FaGithub className="w-5 h-5" />
-          </a>
-             
+                  </a>           
 <a
   href="https://www.reddit.com/user/Aiwedia/"
   target="_blank"

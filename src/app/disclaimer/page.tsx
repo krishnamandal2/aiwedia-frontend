@@ -66,7 +66,7 @@ const Disclaimer = () => {
           href="mailto:your-email@example.com"
           className="text-[#eb442c] font-semibold hover:underline"
         >
-         websonesolutions@gmail.com
+         contactaiwedia@gmail.com
         </a>
       </p>
     </div>

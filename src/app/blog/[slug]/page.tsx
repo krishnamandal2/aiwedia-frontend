@@ -23,8 +23,14 @@ export default function SingleBlogPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public/${slug}`).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public`).then(res => res.json())
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public/${slug}`, {
+        cache: "no-store"
+      }).then(res => res.json()),
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public`, {
+        cache: "no-store"
+      }).then(res => res.json())
+
     ]).then(([blogData, allBlogs]) => {
       setBlog(blogData);
       setRelated(allBlogs.filter((b: Blog) => b.slug !== slug).slice(0, 3));
@@ -44,7 +50,6 @@ export default function SingleBlogPage() {
     });
 
     return { headings, html };
-
   }, [blog]);
 
   const stats = readingTime(blog?.content || "");
