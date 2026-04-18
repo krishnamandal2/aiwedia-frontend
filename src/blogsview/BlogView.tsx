@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import TableOfContents from "@/blogscms/TableOfContents";
 import RelatedPosts from "@/blogscms/RelatedPosts";
+import Blogsletter from "@/newsletter/Blogsletter";
+
+
 
 export default function BlogView({
   blog,
@@ -79,6 +82,8 @@ export default function BlogView({
     return () => observer.disconnect();
   }, [headings]);
 
+  
+
   if (!blog) return <LoadingSkeleton />;
 
   return (
@@ -145,39 +150,62 @@ export default function BlogView({
             </header>
 
             {/* Article */}
-            <article
-              className="
-                prose prose-base sm:prose-lg max-w-none
-                prose-headings:font-serif
-                prose-headings:font-medium
-                prose-p:text-gray-700
-                prose-p:leading-relaxed
-                prose-img:rounded-xl
-                prose-img:shadow-lg
-                prose-img:mx-auto
-                [&_h2]:text-2xl
-                [&_h2]:sm:text-3xl
-                [&_h2]:mt-10
-                [&_h2]:sm:mt-16
-                [&_h2]:mb-4
-                [&_h2]:sm:mb-6
-                [&_h3]:text-xl
-                [&_h3]:sm:text-2xl
-                [&_h3]:mt-8
-                [&_h3]:sm:mt-12
-                [&_h3]:mb-3
-                [&_h3]:sm:mb-4
-                [&_p]:mb-4
-                [&_p]:sm:mb-6
-                [&_ul]:mb-6
-                [&_ol]:mb-6
-                [&_li]:mb-2
-                "
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
+ <article
+  className="
+    max-w-none text-gray-800
+
+    [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mt-6 [&_h1]:mb-3
+    [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-2
+    [&_h3]:text-xl [&_h3]:font-medium [&_h3]:mt-5 [&_h3]:mb-2
+
+    [&_p]:mb-3 [&_p]:leading-relaxed
+
+    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-3
+    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-3
+    [&_li]:mb-1
+
+    [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-3
+
+    [&_img]:rounded-xl [&_img]:my-6 [&_img]:mx-auto
+
+    [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:rounded [&_pre]:text-sm [&_pre]:my-4
+    [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:rounded
+
+    [&_a]:text-blue-600 [&_a]:underline
+
+    /* ✅ TABLE FIX START */
+
+    [&_table]:w-full
+    [&_table]:border-collapse
+    [&_table]:my-6
+    [&_table]:text-sm
+
+    [&_thead]:bg-gray-100
+
+    [&_th]:border
+    [&_th]:px-4
+    [&_th]:py-3
+    [&_th]:text-left
+    [&_th]:font-semibold
+    [&_th]:text-gray-800
+
+    [&_td]:border
+    [&_td]:px-4
+    [&_td]:py-3
+    [&_td]:text-gray-600
+
+    [&_tr:nth-child(even)]:bg-gray-50
+
+    /* ❌ REMOVE THIS LINE (IMPORTANT) */
+    /* [&_table]:block */
+
+  "
+  dangerouslySetInnerHTML={{ __html: html }}
+/>
 
             {/* Related Posts */}
             <footer className="mt-12 md:mt-16 lg:mt-20 pt-8 md:pt-10 border-t border-gray-100">
+               <Blogsletter/>
               <RelatedPosts posts={related} />
             </footer>
           </main>
@@ -237,6 +265,7 @@ export default function BlogView({
   );
 }
 
+
 /* Skeleton */
 function LoadingSkeleton() {
   return (
@@ -252,4 +281,5 @@ function LoadingSkeleton() {
       </div>
     </div>
   );
+  
 }

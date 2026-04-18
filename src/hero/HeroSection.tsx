@@ -1,6 +1,8 @@
 import { Sparkles } from "lucide-react";
-import Searchbar from "@/components/Searchbar";
+import Searchbar from "@/components/search/SearchBar";
 import RoundStrip from "@/HeroStrip/RoundStrip";
+
+
 
 export default function HeroSection() {
   return (
@@ -34,6 +36,7 @@ export default function HeroSection() {
      
      <RoundStrip/>
      
+   
       </div>
     </section>
   );

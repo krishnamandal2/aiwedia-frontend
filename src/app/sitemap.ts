@@ -6,22 +6,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogs: any[] = [];
 
   try {
-    const res = await fetch(`${baseUrl}/api/blog`, {
-      cache: "no-store", // or simply remove fetch options
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public`,
+      { next: { revalidate: 3600 } }
+    );
 
-    blogs = await res.json();
+    if (res.ok) {
+      blogs = await res.json();
+    }
   } catch (error) {
-    console.error("Failed to fetch blogs for sitemap:", error);
+    console.error("Failed to fetch blogs:", error);
   }
 
-  const blogUrls =
-    blogs?.map((blog: any) => ({
-      url: `${baseUrl}/blog/${blog.slug}`,
-      lastModified: new Date(blog.updatedAt || blog.createdAt),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    })) || [];
+  const blogUrls: MetadataRoute.Sitemap = blogs.map((blog: any) => ({
+    url: `${baseUrl}/blog/${blog.slug}`,
+    lastModified: new Date(blog.updatedAt || blog.createdAt || Date.now()),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
   return [
     {
@@ -41,6 +43,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.4,
     },
     ...blogUrls,
   ];

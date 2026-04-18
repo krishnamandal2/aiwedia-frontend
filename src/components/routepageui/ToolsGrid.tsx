@@ -1,10 +1,12 @@
 import CommonCard from "./CommonCard";
+import { memo } from "react";
 
 interface ToolsGridProps {
   tools: any[];
 }
 
-export default function ToolsGrid({ tools }: ToolsGridProps) {
+// Memoize grid to prevent unnecessary re-renders
+const ToolsGrid = memo(({ tools }: ToolsGridProps) => {
   return (
     <div className="grid gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {tools.map((tool) => (
@@ -20,4 +22,8 @@ export default function ToolsGrid({ tools }: ToolsGridProps) {
       ))}
     </div>
   );
-}
+});
+
+ToolsGrid.displayName = "ToolsGrid";
+
+export default ToolsGrid;

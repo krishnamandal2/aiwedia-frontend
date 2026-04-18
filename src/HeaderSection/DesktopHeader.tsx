@@ -1,23 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useScrolled } from "@/hooks/useScrollDirection";
 import { Mail, Phone, Twitter, LinkedinIcon } from "lucide-react";
 import { SiReddit } from "react-icons/si";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ProfileMenu from "@/userprofile/ProfileMenu";
 
-export default function DesktopHeader({
-  megaMenu,
-}: {
-  megaMenu: React.ReactNode;
-}) {
-  const [isScrolled, setIsScrolled] = useState(false);
+const navLinks = [
+  { href: "/category/online-games", label: "Online Games" },
+  { href: "/category/ai-code-generators", label: "Vibe Coding" },
+  { href: "/tools", label: "Free Download" },
+  { href: "/category/ai-background-remover", label: "Bg remover" },
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
 
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+export default function DesktopHeader({ megaMenu }: { megaMenu: React.ReactNode }) {
+  const isScrolled = useScrolled(10);
+  const pathname = usePathname();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -25,119 +27,106 @@ export default function DesktopHeader({
 
   return (
     <header
- className={`sticky top-0 z-[999] bg-white/90 backdrop-blur-md transition-all duration-300 ${
-  isScrolled
-   ? "border-b border-slate-200 shadow-md"
-   : "border-b border-slate-100"
- }`}
->   
-      {/* Top Bar */}
-      <div className="flex justify-between items-center px-12 py-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50/50">
-        <div className="flex gap-6">
+      className={`sticky top-0 z-[999] transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
+          : "bg-white/90 backdrop-blur-sm border-b border-slate-100"
+      }`}
+    >
+      {/* Top Bar - only show on larger screens */}
+      <div className="hidden lg:flex justify-between items-center px-6 xl:px-12 py-2 text-xs font-medium text-slate-600 bg-slate-50/80 border-b border-slate-100">
+        <div className="flex flex-wrap gap-4">
           <a
             href="mailto:contactaiwedia@gmail.com"
-            className="flex items-center gap-2 hover:text-indigo-600"
+            className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors"
+            aria-label="Email us"
           >
-            <Mail size={12} className="text-indigo-600" />
-            contactaiwedia@gmail.com
+            <Mail size={13} className="text-indigo-500" />
+            <span>contactaiwedia@gmail.com</span>
           </a>
-
-          <span className="flex items-center gap-2 hover:text-indigo-600">
-            <Phone size={12} className="text-indigo-600" />
-            +91 9783152203
-          </span>
+          <a
+            href="tel:+919783152203"
+            className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors"
+            aria-label="Call us"
+          >
+            <Phone size={13} className="text-indigo-500" />
+            <span>+91-9818521688</span>
+          </a>
         </div>
 
-        <div className="flex gap-4 items-center">
-          <a href="https://www.reddit.com/user/Aiwedia/" target="_blank">
-            <SiReddit className="hover:text-orange-500 cursor-pointer" size={14} />
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/aiwedia-group-27231a3b6/"
-            target="_blank"
+        <div className="flex gap-3 items-center">
+          <SocialLinks />
+          <Link
+            href="/source"
+            className="hover:text-indigo-600 text-xs font-medium transition-colors"
           >
-            <LinkedinIcon
-              size={14}
-              className="hover:text-blue-600 cursor-pointer"
-            />
-          </a>
-
-          <a href="https://x.com/aiwedia1" target="_blank">
-            <Twitter
-              size={14}
-              className="hover:text-indigo-600 cursor-pointer"
-            />
-          </a>
-
-          <Link href="/source" className="hover:text-indigo-600 text-xs">
             Source
           </Link>
         </div>
       </div>
 
       {/* Main Header */}
-      <div className="flex h-28 items-center justify-between px-12">
-        <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-4 md:px-6 xl:px-12 py-4 min-h-[4.5rem]">
+        <div className="flex items-center gap-4">
           <Link
             href="/"
             onClick={scrollToTop}
-            className="font-extrabold text-3xl tracking-tight"
+            className="font-extrabold text-2xl md:text-3xl tracking-tight whitespace-nowrap"
+            aria-label="AiWedia Home"
           >
             <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               AiWedia
             </span>
           </Link>
-
           {megaMenu}
         </div>
 
-        <div className="flex items-center gap-8">
-          <nav className="flex gap-8 text-sm font-bold text-slate-600">
-            <Link
-              href="/category/onlinegames/"
-              className="hover:text-indigo-600"
-            >
-              Online Games
-            </Link>
-
-            <Link
-              href="/category/vibecoding"
-              className="hover:text-indigo-600"
-            >
-              Vibe Coding
-            </Link>
-
-            <Link
-              href="/category/aimarketingseo"
-              className="hover:text-indigo-600"
-            >
-              AI For Seo
-            </Link>
-
-            <Link
-              href="/category/ImageBackgroundRemover"
-              className="hover:text-indigo-600"
-            >
-              Bg remover
-            </Link>
-
-            <Link href="/about" className="hover:text-indigo-600">
-              About
-            </Link>
-
-            <Link href="/blog" className="hover:text-indigo-600">
-              Blog
-            </Link>
-
-            <Link href="/contact" className="hover:text-indigo-600">
-              Contact
-            </Link>
+        <div className="flex items-center gap-6">
+          <nav className="hidden lg:flex flex-wrap gap-5 text-sm font-semibold">
+            {navLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`transition-colors ${
+                  pathname === href
+                    ? "text-indigo-600 border-b-2 border-indigo-500 pb-0.5"
+                    : "text-slate-700 hover:text-indigo-600"
+                }`}
+                aria-current={pathname === href ? "page" : undefined}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
-
           <ProfileMenu />
         </div>
       </div>
     </header>
+  );
+}
+
+// Reusable social links component
+function SocialLinks() {
+  const socials = [
+    { icon: SiReddit, href: "https://www.reddit.com/user/Aiwedia/", label: "Reddit", color: "hover:text-orange-500" },
+    { icon: LinkedinIcon, href: "https://www.linkedin.com/in/aiwedia-group-27231a3b6/", label: "LinkedIn", color: "hover:text-blue-600" },
+    { icon: Twitter, href: "https://x.com/aiwedia1", label: "Twitter", color: "hover:text-indigo-500" },
+  ];
+
+  return (
+    <>
+      {socials.map(({ icon: Icon, href, label, color }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          className={`transition-colors ${color}`}
+        >
+          <Icon size={15} />
+        </a>
+      ))}
+    </>
   );
 }

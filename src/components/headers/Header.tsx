@@ -1,6 +1,6 @@
 import HeaderClient from "./HeaderClient";
 import MegaExploreClient from "@/megamenu/MegaExploreClient";
-import Smalldevicemenu from "@/components/Smalldevicemenu";
+import Smalldevicemenu from "@/components/mobilemenu/Smalldevicemenu";
 import { getMenuCategories } from "@/lib/api";
 
 export default async function Header() {

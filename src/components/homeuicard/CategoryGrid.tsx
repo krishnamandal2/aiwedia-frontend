@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import CategoryCard from "@/components/CategoryCard";
+import CategoryCard from "@/components/homeuicard/CategoryCard ";
 
 /* ================= TYPES ================= */
 
@@ -122,7 +122,7 @@ export default function CategoryGrid({
       {/* CLS-SAFE LOADER */}
       <div
         ref={loadMoreRef}
-        className="py-10 min-h-[160px] flex items-center justify-center text-sm text-slate-500"
+         className="py-4 flex items-center justify-center text-sm text-slate-500"
       >
         {hasMore && "Loading more…"}
       </div>

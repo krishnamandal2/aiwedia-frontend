@@ -56,3 +56,38 @@ body {
   list-style: disc;
   padding-left: 1.5rem;
 }
+
+.backdrop-blur-md {
+  will-change: transform; /* reduces repaint on scroll */
+}
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+  min-width: 600px; /* 👈 makes horizontal scroll on mobile */
+}
+
+article th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+article td {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+article tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+/* scroll container */
+article table {
+  display: block;
+  overflow-x: auto;
+}

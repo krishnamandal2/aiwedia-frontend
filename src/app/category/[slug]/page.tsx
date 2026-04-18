@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import CategoryPage from "@/components/CategoryPage";
+import CategoryPage from "@/components/routepageui/CategoryPage"
 import { getToolsByCategory, CategoryResponse } from "@/lib/api";
 
 // export const revalidate = 3600; // ISR

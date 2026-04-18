@@ -8,12 +8,12 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const categories = [
-    { name: "AI Tools", href: "/category/aitools", count: 30 },
-    { name: "Vibe Coding", href: "/category/vibecoding", count: 15 },
-    { name: "Web Design", href: "/category/aiwebdesign", count: 28 },
-    { name: "Voice Change Ai", href: "/category/AIVoice", count: 16},
-    { name: "Marketing and Seo", href: "/category/aimarketingseo", count: 24 },
-    { name: "Online Games", href: "/category/onlinegames", count: 40 },
+    { name: "AI Tools", href: "/category/ai-tools", count: 30 },
+    { name: "Vibe Coding", href: "/category/ai-code-generators", count: 15 },
+    { name: "Web Design", href: "/category/ai-web-design-tools", count: 28 },
+    { name: "Voice Change Ai", href: "/category/ai-voice-generators", count: 16},
+    { name: "Top Trending Websites", href: "/top-trending-websites", count: 24 },
+    { name: "Online Games", href: "/category/online-games", count: 40 },
   ];
 
   const quickLinks = [

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"
 import "@/app/globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Providers from "@/components/Providers";
-import Chatbot from "@/Aichartbot/Chatbot";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
-
+import Header from "@/components/headers/Header";
+import Footer from "@/components/footer/Footer";
+import Providers from "@/components/toastui/Providers"
+// import Chatbot from "@/Aichartbot/Chatbot";
+import ScrollToTopButton from "@/components/topbutton/ScrollToTopButton";
+import Chatllm from "@/LLMChatboat/Chatllm";
+import OfflineBanner from "@/offline/OfflineBanner";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const revalidate = 60;
@@ -15,6 +16,10 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aiwedia.com"),
+
+    alternates: {
+    canonical: "/",
+  },
 
    verification: {
     google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M",
@@ -29,9 +34,11 @@ export const metadata: Metadata = {
     "Discover the best AI tools, developer resources, gaming updates, SEO tools, PDF tools and trending tech news on Aiwedia.",
 
 keywords: [
-    "best AI tools 2026",
+    "best AI tools",
     "AI tools directory",
+    "top websites 2026",
     "free AI tools",
+    "top-trending-websites",
     "AI tools for developers",
     "AI image generator",
     "PDF tools online",
@@ -100,19 +107,34 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
 
-        <script
+
+      {/* ✅ GLOBAL OFFLINE BANNER */}
+        <OfflineBanner />
+
+     <script
   type="application/ld+json"
-   dangerouslySetInnerHTML={{
-     __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Organization",
-       name: "Aiwedia",
-       url: "https://aiwedia.com",
-       sameAs: [
-        "https://x.com/aiwedia1",
-        
-      ]
-    }),
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify([
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Aiwedia",
+        url: "https://aiwedia.com",
+        logo: "https://aiwedia.com/favicon.png",
+        sameAs: ["https://x.com/aiwedia1"],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Aiwedia",
+        url: "https://aiwedia.com",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://aiwedia.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ]),
   }}
 />
         <Header />
@@ -121,7 +143,11 @@ export default function RootLayout({
         <Providers />
         {/* Floating Components */}
         <ScrollToTopButton />
-        <Chatbot />
+        <Chatllm />
+      
+
+       
+
       </body>
       
     </html>
