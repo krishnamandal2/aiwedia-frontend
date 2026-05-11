@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
-
 export default function AdminLogin() {
   const router = useRouter();
 
@@ -13,43 +11,68 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
+
     if (loading) return;
 
     setLoading(true);
     setError("");
 
     try {
-      // 🔐 LOGIN
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      // LOGIN
+      const loginRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
-      const data = await res.json();
+      const loginData = await loginRes.json();
 
-      if (!res.ok) {
-        setError(data.message || "Invalid email or password");
+      if (!loginRes.ok) {
+        setError(loginData.message || "Invalid credentials");
         setLoading(false);
         return;
       }
 
-      // ✅ VERIFY SESSION
-      const verify = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify`, {
-        credentials: "include",
-      });
+      // VERIFY SESSION
+      const verifyRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
-      if (!verify.ok) {
+      const verifyData = await verifyRes.json();
+
+      console.log("VERIFY:", verifyData);
+
+      if (!verifyRes.ok) {
         setError("Session verification failed");
         setLoading(false);
         return;
       }
 
-      router.push("/admin/dashboard");
-    } catch {
+      // SUCCESS REDIRECT
+      window.location.href = "/admin/dashboard";
+
+      // OR:
+      // router.replace("/admin/dashboard");
+
+    } catch (err) {
+      console.error(err);
       setError("Server error. Please try again.");
     } finally {
       setLoading(false);
@@ -59,15 +82,17 @@ export default function AdminLogin() {
   return (
     <div
       style={{
-        maxWidth: 420,
+        maxWidth: "420px",
         margin: "100px auto",
-        padding: 24,
+        padding: "24px",
         border: "1px solid #ddd",
-        borderRadius: 8,
+        borderRadius: "8px",
         background: "#fff",
       }}
     >
-      <h2 style={{ marginBottom: 20 }}>Admin Login</h2>
+      <h2 style={{ marginBottom: "20px" }}>
+        Admin Login
+      </h2>
 
       <form onSubmit={handleLogin}>
         <input
@@ -76,7 +101,11 @@ export default function AdminLogin() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ width: "100%", padding: 10, marginBottom: 12 }}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "12px",
+          }}
         />
 
         <input
@@ -85,11 +114,22 @@ export default function AdminLogin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: "100%", padding: 10, marginBottom: 12 }}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "12px",
+          }}
         />
 
         {error && (
-          <p style={{ color: "#b00020", marginBottom: 10 }}>{error}</p>
+          <p
+            style={{
+              color: "#b00020",
+              marginBottom: "10px",
+            }}
+          >
+            {error}
+          </p>
         )}
 
         <button
@@ -97,12 +137,12 @@ export default function AdminLogin() {
           disabled={loading}
           style={{
             width: "100%",
-            padding: 12,
-            fontSize: 16,
+            padding: "12px",
+            fontSize: "16px",
             cursor: loading ? "not-allowed" : "pointer",
           }}
         >
-          {loading ? "Logging in…" : "Login"}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
