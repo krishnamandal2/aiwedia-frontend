@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { getCategories } from "@/lib/api";
 
 export interface Category {
   title: string;
@@ -21,13 +20,17 @@ const useCategories = () => {
 
     setLoading(true);
     try {
-      const data = await getCategories(page, 12);
+      const base = process.env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(
+        `${base}/api/categories?page=${page}&limit=12`
+      );
+      const data = await res.json();
 
       if (!data?.categories?.length) {
         setHasMore(false);
       } else {
-        setCategories(prev => [...prev, ...data.categories]);
-        setPage(prev => prev + 1);
+        setCategories((prev) => [...prev, ...data.categories]);
+        setPage((prev) => prev + 1);
       }
     } catch (err) {
       console.error(err);

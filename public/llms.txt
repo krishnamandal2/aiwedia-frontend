@@ -1,0 +1,22 @@
+# AIWedia (https://aiwedia.com)
+
+> Curated directory of AI tools, coding assistants, SEO tools, free download utilities, and trending websites.
+
+## Primary pages
+
+- Home: https://aiwedia.com/
+- AI tools directory: https://aiwedia.com/category/ai-tools
+- AI coding / vibe coding: https://aiwedia.com/category/ai-code-generators
+- AI SEO tools: https://aiwedia.com/category/ai-seo-tools
+- AI directory hub: https://aiwedia.com/ai-directory
+- Free tools: https://aiwedia.com/tools
+- Trending websites: https://aiwedia.com/top-trending-websites
+- Blog: https://aiwedia.com/blog
+
+## Sitemap
+
+https://aiwedia.com/sitemap.xml
+
+## Contact
+
+https://aiwedia.com/contact

@@ -8,14 +8,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MobileProfileMenu from "@/userprofile/MobileProfileMenu";
 import { useScrolled } from "@/hooks/useScrollDirection";
+import Smalldevicemenu from "@/components/mobilemenu/Smalldevicemenu";
+import MobileCategoryHubs from "@/components/mobilemenu/MobileCategoryHubs";
+import type { MenuCategory } from "@/lib/megaMenuUtils";
 
 // Static data moved outside component to prevent recreation
 const MOBILE_NAV_LINKS = [
+  { href: "/ai-directory", label: "AI Directory Hub" },
+  { href: "/web-directory", label: "Web & Utility Hub" },
   { href: "/category/online-games", label: "Online Games" },
-  { href: "/category/ai-background-remover", label: "Image BG Remover" },
-  { href: "/category/ai-tools", label: "AI Websites" },
+  { href: "/category/ai-code-generators", label: "Vibe Coding" },
+  { href: "/category/ai-background-remover", label: "Bg remover" },
+  { href: "/tools", label: "Free Download" },
   { href: "/top-trending-websites", label: "Top Trending websites" },
-   { href: "/tools", label: "Free Download" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
@@ -27,21 +32,22 @@ const SOCIAL_LINKS = [
   { href: "https://x.com/aiwedia1", icon: Twitter, label: "Twitter", color: "text-slate-700" },
 ] as const;
 
-export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNode }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function MobileHeader({
+  categories,
+}: {
+  categories: MenuCategory[];
+}) {
   const pathname = usePathname();
+  const [menuPath, setMenuPath] = useState<string | null>(null);
+  /** Closes automatically when the route changes (menuPath !== pathname) */
+  const isMenuOpen = menuPath === pathname;
   const drawerRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const touchStartX = useRef<number>(0);
   const isScrolled = useScrolled(10);
 
-  const openMenu = useCallback(() => setIsMenuOpen(true), []);
-  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
-
-  // Close drawer on route change
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
+  const openMenu = useCallback(() => setMenuPath(pathname), [pathname]);
+  const closeMenu = useCallback(() => setMenuPath(null), []);
 
   // Body scroll lock when drawer is open
   useEffect(() => {
@@ -121,17 +127,17 @@ export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNo
   return (
     <>
       <header
-        className={`sticky top-0 z-[999] transition-all duration-300 will-change-transform ${
+        className={`relative z-10 w-full transition-all duration-300 ${
           isScrolled
             ? "bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
             : "bg-white border-b border-slate-100"
         }`}
       >
-        <div className="flex h-16 items-center justify-between px-4">
+        <div className="flex h-14 min-h-[56px] items-center justify-between gap-2 px-3 sm:h-16 sm:px-4">
           <button
             ref={menuButtonRef}
             onClick={openMenu}
-            className="p-2 rounded-xl hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
             aria-label="Open menu"
             aria-expanded={isMenuOpen}
             aria-haspopup="dialog"
@@ -142,7 +148,7 @@ export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNo
           <Link
             href="/"
             onClick={scrollToTop}
-            className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+            className="truncate font-extrabold text-lg tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent sm:text-xl"
           >
             AiWedia
           </Link>
@@ -168,13 +174,17 @@ export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNo
         aria-modal="true"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
-        className={`fixed top-0 left-0 h-full w-full sm:w-96 bg-white z-[999] shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+        className={`fixed top-0 left-0 z-[999] flex h-[100dvh] max-h-[100dvh] w-full max-w-[100vw] flex-col bg-white shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] sm:w-96 sm:max-w-[24rem] ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          paddingTop: "env(safe-area-inset-top, 0px)",
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex min-h-0 flex-1 flex-col">
           {/* Drawer header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-white sticky top-0 z-10">
+          <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-5 sm:py-4">
             <span className="font-semibold text-lg text-slate-800">Menu</span>
             <button
               onClick={closeMenu}
@@ -186,9 +196,15 @@ export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNo
           </div>
 
           {/* Drawer content with improved spacing and touch-friendly targets */}
-          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-1">
+          <div
+            className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain px-4 py-5 sm:px-5 sm:py-6"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             {/* Custom mobile menu content from parent */}
-            <div className="mb-6">{mobileMenu}</div>
+            <div className="mb-5 space-y-4">
+              <MobileCategoryHubs categories={categories} onNavigate={closeMenu} />
+              <Smalldevicemenu categories={categories} closeMenu={closeMenu} />
+            </div>
 
             {/* Navigation links */}
             <nav className="space-y-1">
@@ -200,11 +216,11 @@ export default function MobileHeader({ mobileMenu }: { mobileMenu: React.ReactNo
             {/* Contact information */}
             <div className="pt-8 mt-6 border-t border-slate-200 space-y-4 text-sm">
               <a
-                href="mailto:contactaiwedia@gmail.com"
+                href="mailto:contact@aiwedia.com"
                 className="flex items-center gap-3 text-slate-600 hover:text-indigo-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg p-2 -ml-1"
               >
                 <Mail size={18} className="flex-shrink-0" />
-                <span>contactaiwedia@gmail.com</span>
+                <span className="truncate">contact@aiwedia.com</span>
               </a>
               <a
                 href="tel:+919783152203"
@@ -256,7 +272,7 @@ const NavItem = memo(function NavItem({
     <Link
       href={href}
       onClick={onClick}
-      className={`flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 ${
+      className={`flex min-h-[48px] touch-manipulation items-center justify-between rounded-xl p-3 font-medium transition-all duration-200 ${
         isActive
           ? "bg-indigo-50 text-indigo-700"
           : "text-slate-700 hover:bg-slate-100"

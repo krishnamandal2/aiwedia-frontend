@@ -101,7 +101,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full max-w-2xl mx-auto">
+    <div ref={wrapperRef} className="relative mx-auto w-full min-w-0 max-w-2xl">
       <div className="relative">
         <input
           ref={inputRef}
@@ -110,10 +110,19 @@ const SearchBar = () => {
           onChange={e => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Search tools or categories..."
-          className="w-full h-12 pl-12 pr-12 rounded-xl border outline-none"
+          className="h-12 min-h-[48px] w-full touch-manipulation rounded-xl border border-slate-200 bg-white pl-11 pr-11 text-base outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 sm:pl-12 sm:pr-12"
         />
-        <Search className="absolute left-4 top-3 text-gray-400" />
-        {query && <X className="absolute right-4 top-3 cursor-pointer" onClick={() => setQuery("")} />}
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-gray-400 sm:left-4" />
+        {query && (
+          <button
+            type="button"
+            aria-label="Clear search"
+            className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-gray-500 hover:bg-slate-100"
+            onClick={() => setQuery("")}
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       {notFoundMessage && (
@@ -121,7 +130,7 @@ const SearchBar = () => {
       )}
 
       {isFocused && (loading || results.length > 0) && (
-        <div className="absolute top-full left-0 w-full mt-2 bg-white border rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[min(70vh,20rem)] overflow-y-auto overscroll-contain rounded-xl border bg-white shadow-lg">
           {loading && (
             <div className="p-4 text-gray-500 flex items-center gap-2">
               <Loader2 className="animate-spin" /> Searching...

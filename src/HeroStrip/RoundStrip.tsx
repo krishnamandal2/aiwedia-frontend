@@ -11,7 +11,7 @@ export default function RoundStrip() {
   const [visibleCount] = useState(24);
 
   return (
-    <section className="w-full px-3 sm:px-4 md:px-6 lg:px-8 mt-20">
+    <section className="mt-12 w-full min-w-0 px-2 sm:mt-16 sm:px-4 md:px-6 lg:mt-20 lg:px-8">
       <div className="max-w-7xl mx-auto">
 
         {/* Animation Wrapper */}
@@ -26,7 +26,7 @@ export default function RoundStrip() {
             md:grid-cols-6
             lg:grid-cols-7
             xl:grid-cols-8
-            gap-x-4 gap-y-8
+            gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8
           "
         >
           {StripData.slice(0, visibleCount).map((tool, index) => (
@@ -80,8 +80,7 @@ export default function RoundStrip() {
                     quality={70}
                     loading={index < 6 ? "eager" : "lazy"} // top items load fast
                     priority={index < 6} // boost above-the-fold
-                    placeholder="blur"
-                    blurDataURL="/placeholder.png" // add small blur image in public
+                    placeholder="empty"
                     className="object-cover"
                   />
                 </div>

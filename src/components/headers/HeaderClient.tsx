@@ -2,30 +2,28 @@
 
 import DesktopHeader from "@/HeaderSection/DesktopHeader";
 import MobileHeader from "@/HeaderSection/MobileHeader";
-
-
+import MegaExploreClient from "@/megamenu/MegaExploreClient";
+import type { MenuCategory } from "@/lib/megaMenuUtils";
 
 export default function HeaderClient({
-  megaMenu,
-  mobileMenu,
+  categories,
 }: {
-  megaMenu: React.ReactNode;
-  mobileMenu: React.ReactNode;
+  categories: MenuCategory[];
 }) {
   return (
-    <div className="sticky top-0 z-[999]">
-      
-      {/* Desktop */}
+    <div
+      data-site-header
+      className="sticky top-0 z-[999] w-full overflow-visible"
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+    >
       <div className="hidden lg:block">
-        <DesktopHeader megaMenu={megaMenu} />
+        <DesktopHeader
+          megaMenu={<MegaExploreClient categories={categories} />}
+        />
       </div>
-
-      {/* Mobile */}
       <div className="lg:hidden">
-        <MobileHeader mobileMenu={mobileMenu} />
+        <MobileHeader categories={categories} />
       </div>
- 
-   
     </div>
   );
 }

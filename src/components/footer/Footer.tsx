@@ -1,27 +1,38 @@
 import { Twitter, LinkedinIcon, Mail, ExternalLink, ChevronRight } from "lucide-react";
 import { FaGithub, FaReddit } from "react-icons/fa";
 import NewsletterSubscribe from "@/newsletter/NewsletterSubscribe";
+import CookieSettingsButton from "@/components/consent/CookieSettingsButton";
 import Link from "next/link";
+import { getSiteConfig } from "@/lib/api";
 
+type FooterCat = { name: string; href: string; count?: number };
 
-const Footer = () => {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+  const config = await getSiteConfig();
 
-  const categories = [
-    { name: "AI Tools", href: "/category/ai-tools", count: 30 },
-    { name: "Vibe Coding", href: "/category/ai-code-generators", count: 15 },
-    { name: "Web Design", href: "/category/ai-web-design-tools", count: 28 },
-    { name: "Voice Change Ai", href: "/category/ai-voice-generators", count: 16},
-    { name: "Top Trending Websites", href: "/top-trending-websites", count: 24 },
-    { name: "Online Games", href: "/category/online-games", count: 40 },
-  ];
+  const footerFromApi = config.footer_categories as FooterCat[] | undefined;
+  const categories =
+    footerFromApi && footerFromApi.length > 0
+      ? footerFromApi
+      : [
+          { name: "AI Tools", href: "/category/ai-tools" },
+          { name: "AI SEO Tools", href: "/category/ai-seo-tools" },
+          { name: "Vibe Coding", href: "/category/ai-code-generators" },
+          { name: "Web Directory", href: "/web-directory" },
+          { name: "Free Downloads", href: "/tools" },
+          { name: "AI Directory", href: "/ai-directory" },
+        ];
 
   const quickLinks = [
     { name: "Blog", href: "/blog" },
+    { name: "Best Guides", href: "/best" },
+    { name: "Compare Tools", href: "/compare" },
+    { name: "Collections", href: "/collections" },
+    { name: "Suggest a Tool", href: "/suggest-tool" },
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
     { name: "Home", href: "/" },
-    
   ];
 
   const resources = [
@@ -36,17 +47,14 @@ const Footer = () => {
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Cookie Policy", href: "/cookies" },
     { name: "Disclaimer", href: "/disclaimer" },
- 
   ];
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
-
-          {/* Brand Section - Full width on mobile, 5 cols on desktop */}
+    <footer
+      className="relative z-20 bg-slate-950 text-slate-300 pt-12 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] sm:pt-16 sm:pb-8"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5 space-y-6">
             <Link
               href="/"
@@ -67,26 +75,8 @@ const Footer = () => {
               websites across categories in one streamlined interface.
             </p>
 
-            {/* Stats */}
-            <div className="flex flex-wrap gap-6">
-              <div>
-                <div className="text-2xl font-bold text-white">200+</div>
-                <div className="text-xs text-slate-500">Curated Tools</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-white">35+</div>
-                <div className="text-xs text-slate-500">Office tools</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-white">40+</div>
-                <div className="text-xs text-slate-500">Categories</div>
-              </div>
-            </div>
+            <NewsletterSubscribe />
 
-            {/* Email Subscription */}
-           <NewsletterSubscribe/>
-
-            {/* Email Contact */}
             <a
               href="mailto:contact@aiwedia.com"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-indigo-500 hover:text-white transition text-sm group"
@@ -97,43 +87,35 @@ const Footer = () => {
             </a>
           </div>
 
-          {/* Links Section - 7 cols on desktop */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-
-            {/* Categories */}
-            <div className="col-span-2 sm:col-span-1">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-7 lg:grid-cols-4 lg:gap-6">
+            <div className="min-w-0 sm:col-span-2 lg:col-span-1">
               <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
                 Categories
               </h4>
               <ul className="space-y-3">
-                {categories.slice(0, 5).map((item) => (
+                {categories.slice(0, 8).map((item) => (
                   <li key={item.name}>
-                    <Link 
-                      href={item.href} 
-                      prefetch={false} 
-                      className="text-sm hover:text-indigo-400 transition flex items-center justify-between group"
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className="flex min-h-[44px] items-center justify-between gap-2 text-sm transition hover:text-indigo-400 touch-manipulation"
                     >
-                      <span>{item.name}</span>
-                      {item.count && (
-                        <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full group-hover:bg-indigo-900/30 group-hover:text-indigo-400">
+                      <span className="min-w-0 truncate">{item.name}</span>
+                      {item.count != null && (
+                        <span className="text-xs text-slate-600 group-hover:text-indigo-400">
                           {item.count}
                         </span>
                       )}
+                      <ChevronRight
+                        size={14}
+                        className="opacity-0 group-hover:opacity-100 transition -mr-4 group-hover:mr-0"
+                      />
                     </Link>
                   </li>
                 ))}
-                <li>
-                  <Link 
-                    href="/" 
-                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 mt-2"
-                  >
-                    View all <ChevronRight size={12} />
-                  </Link>
-                </li>
               </ul>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
                 Quick Links
@@ -141,34 +123,9 @@ const Footer = () => {
               <ul className="space-y-3">
                 {quickLinks.map((item) => (
                   <li key={item.name}>
-                    <Link 
-                      href={item.href} 
-                      prefetch={false} 
-                      className="text-sm hover:text-indigo-400 transition flex items-center gap-2"
-                    >
-                      {item.name}
-                      {(
-                        <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded-full">
-                         
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
-                Resources
-              </h4>
-              <ul className="space-y-3">
-                {resources.map((item) => (
-                  <li key={item.name}>
-                    <Link 
-                      href={item.href} 
-                      prefetch={false} 
+                    <Link
+                      href={item.href}
+                      prefetch={false}
                       className="text-sm hover:text-indigo-400 transition"
                     >
                       {item.name}
@@ -178,116 +135,89 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Legal & Social - Stack on mobile */}
-            <div className="col-span-2 sm:col-span-1 space-y-6">
-              <div>
-                <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
-                  Legal
-                </h4>
-                <ul className="space-y-3">
-                  {legal.slice(0, 4).map((item) => (
-                    <li key={item.name}>
-                      <Link 
-                        href={item.href} 
-                        prefetch={false} 
-                        className="text-sm hover:text-indigo-400 transition"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
+                Resources
+              </h4>
+              <ul className="space-y-3">
+                {resources.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className="text-sm hover:text-indigo-400 transition"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              {/* Social Links */}
-              <div>
-                <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
-                  Connect
-                </h4>
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="https://x.com/aiwedia1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 hover:bg-slate-800 transition group"
-                    aria-label="Twitter"
-                  >
-                    <Twitter size={18} />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/aiwedia-group-27231a3b6/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 hover:bg-slate-800 transition group"
-                    aria-label="LinkedIn"
-                  >
-                    <LinkedinIcon size={18} />
-                  </a>           
-<a
-  href="https://www.reddit.com/user/Aiwedia/"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 hover:text-indigo-400 hover:bg-slate-800 transition group"
-  aria-label="Reddit"
->
-  <FaReddit className="w-5 h-5" />
-</a>
-                 
-                </div>
-              </div>
+            <div>
+              <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">
+                Legal
+              </h4>
+              <ul className="space-y-3">
+                {legal.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className="text-sm hover:text-indigo-400 transition"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <CookieSettingsButton variant="footer" />
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar - Improved mobile layout */}
-        <div className="mt-12 pt-8 border-t border-slate-900">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            
-            {/* Copyright */}
-            <p className="text-xs text-slate-600 text-center lg:text-left order-3 lg:order-1">
-              © {currentYear} AiWedia. All rights reserved. 
-              <span className="block sm:inline sm:ml-1">
-                Built with ❤️ for the AI community.
-              </span>
-            </p>
-
-            {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4 order-1 lg:order-2">
-              <span className="text-xs text-slate-700 flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                All systems operational
-              </span>
-              <span className="text-xs text-slate-700 hidden sm:inline">|</span>
-              <span className="text-xs text-slate-700">
-                ⚡ 99.9% uptime
-              </span>
-            </div>
-
-            {/* Legal Links - Horizontal scroll on mobile */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-6 text-xs font-medium order-2 lg:order-3">
-              {legal.map((item) => (
-                <Link 
-                  key={item.name}
-                  href={item.href} 
-                  prefetch={false} 
-                  className="text-slate-600 hover:text-white transition whitespace-nowrap"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Additional Info - Mobile only */}
-          <div className="mt-6 text-center lg:hidden">
-            <p className="text-xs text-slate-700">
-              Made with ❤️ by the AiWedia team
-            </p>
+        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-slate-500">
+            © {currentYear} AIWedia. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://x.com/aiwedia1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-white transition"
+            >
+              <Twitter size={18} />
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-white transition"
+            >
+              <FaGithub size={18} />
+            </a>
+            <a
+              href="https://reddit.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-white transition"
+            >
+              <FaReddit size={18} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-white transition"
+            >
+              <LinkedinIcon size={18} />
+            </a>
           </div>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

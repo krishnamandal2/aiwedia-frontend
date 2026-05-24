@@ -3,11 +3,50 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
+  --site-header-height: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --site-header-height: 4rem;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+  overflow-x: hidden;
+  min-height: 100dvh;
+  min-height: 100vh;
+}
+
+/* Prevent horizontal overflow from wide children */
+#__next,
+main {
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* iOS: 16px+ inputs avoid zoom on focus */
+@media (max-width: 1023px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 /* Line clamp utilities */
@@ -59,6 +98,14 @@ body {
 
 .backdrop-blur-md {
   will-change: transform; /* reduces repaint on scroll */
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 article table {
   width: 100%;

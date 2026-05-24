@@ -28,14 +28,12 @@ export default function ScrollToTopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Scroll to top"
       className="
-        fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000]
-        flex items-center gap-2
-        px-5 py-2
-        bg-white text-black
-        rounded-full
-        shadow-xl border border-gray-200
-        hover:scale-105 hover:shadow-2xl
-        transition-all duration-300
+        fixed z-[997] flex min-h-[44px] items-center gap-2
+        rounded-full border border-gray-200 bg-white px-4 py-2.5 text-black shadow-xl
+        transition-all duration-300 hover:scale-105 hover:shadow-2xl
+        bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] left-4
+        sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:px-5
+        lg:bottom-6
       "
     >
       <ArrowUp size={16} />

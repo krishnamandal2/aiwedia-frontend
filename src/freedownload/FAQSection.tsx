@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 type FAQ = {
   question: string;
@@ -13,100 +13,54 @@ type Props = {
 };
 
 export default function FAQSection({ faq }: Props) {
-
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   if (!faq || faq.length === 0) return null;
 
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
-
-    <section className="mt-20 px-4">
-
-      {/* Header */}
-      <div className="text-center mb-12">
-
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">
-          Frequently Asked Questions
-        </h2>
-
-        <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-sm md:text-base">
-          Find quick answers to common questions about these tools.
-        </p>
-
+    <section>
+      <div className="mb-6 flex items-center gap-3">
+        <div className="rounded-xl bg-violet-500/15 p-2 text-violet-400">
+          <HelpCircle className="h-5 w-5" />
+        </div>
+        <h2 className="text-xl font-bold text-white">FAQ</h2>
       </div>
 
-      {/* FAQ List */}
-      <div className="max-w-3xl mx-auto space-y-4">
-
+      <div className="space-y-2">
         {faq.map((item, index) => {
-
           const isOpen = openIndex === index;
-
           return (
-
             <div
               key={index}
-              className={`border rounded-2xl transition-all duration-300 overflow-hidden
-                ${isOpen
-                  ? "border-blue-500 shadow-md"
-                  : "border-gray-200 hover:border-gray-300"}
-              `}
+              className={`overflow-hidden rounded-xl border transition ${
+                isOpen
+                  ? "border-emerald-500/40 bg-white/[0.04]"
+                  : "border-white/10 bg-white/[0.02] hover:border-white/15"
+              }`}
             >
-
-              {/* Question */}
               <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between gap-4
-                p-5 md:p-6 text-left font-medium text-gray-900
-                hover:bg-gray-50 transition"
+                type="button"
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="flex w-full items-center justify-between gap-4 p-4 text-left"
               >
-
-                <span className="text-sm md:text-base lg:text-lg">
+                <span className="text-sm font-semibold text-slate-200 sm:text-base">
                   {item.question}
                 </span>
-
-                {/* Icon */}
                 <ChevronDown
-                  className={`w-5 h-5 shrink-0 transition-transform duration-300
-                  ${isOpen ? "rotate-180 text-blue-600" : "text-gray-400"}
-                  `}
+                  className={`h-5 w-5 shrink-0 text-slate-500 transition ${
+                    isOpen ? "rotate-180 text-emerald-400" : ""
+                  }`}
                 />
-
               </button>
-
-              {/* Answer */}
-              <div
-                className={`grid transition-all duration-300
-                ${isOpen
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0"}
-                `}
-              >
-
-                <div className="overflow-hidden">
-
-                  <p className="px-5 md:px-6 pb-5 md:pb-6 text-gray-600 text-sm md:text-base leading-relaxed">
-                    {item.answer}
-                  </p>
-
-                </div>
-
-              </div>
-
+              {isOpen && (
+                <p className="border-t border-white/5 px-4 pb-4 text-sm leading-relaxed text-slate-400">
+                  {item.answer}
+                </p>
+              )}
             </div>
-
           );
-
         })}
-
       </div>
-
     </section>
-
   );
-
 }

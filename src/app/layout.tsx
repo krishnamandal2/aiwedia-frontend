@@ -8,6 +8,8 @@ import Providers from "@/components/toastui/Providers"
 import ScrollToTopButton from "@/components/topbutton/ScrollToTopButton";
 import Chatllm from "@/LLMChatboat/Chatllm";
 import OfflineBanner from "@/offline/OfflineBanner";
+import ConsentGatedAnalytics from "@/components/consent/ConsentGatedAnalytics";
+import CookieConsentBanner from "@/components/consent/CookieConsentBanner";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const revalidate = 60;
@@ -106,7 +108,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-
+        <ConsentGatedAnalytics />
+        <CookieConsentBanner />
 
       {/* ✅ GLOBAL OFFLINE BANNER */}
         <OfflineBanner />
@@ -138,7 +141,9 @@ export default function RootLayout({
   }}
 />
         <Header />
-        <main>{children}</main>
+        <main className="relative min-w-0 overflow-x-hidden">
+          {children}
+        </main>
         <Footer />
         <Providers />
         {/* Floating Components */}

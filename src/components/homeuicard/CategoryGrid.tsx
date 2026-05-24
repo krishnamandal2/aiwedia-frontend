@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import CategoryCard from "@/components/homeuicard/CategoryCard ";
+import CategoryCard from "@/components/homeuicard/CategoryCard";
 
 /* ================= TYPES ================= */
 
@@ -107,17 +107,22 @@ export default function CategoryGrid({
 
   return (
     <>
-      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <ul
+        className="grid list-none grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4 xl:gap-7"
+        role="list"
+      >
         {categories.map((cat) => (
-          <CategoryCard
-            key={cat.slug}
-            image={cat.image}
-            title={cat.title}
-            description={cat.desc}
-            slug={cat.slug}
-          />
+          <li key={cat.slug} className="min-w-0">
+            <CategoryCard
+              image={cat.image}
+              title={cat.title}
+              description={cat.desc}
+              slug={cat.slug}
+              variant="web"
+            />
+          </li>
         ))}
-      </div>
+      </ul>
 
       {/* CLS-SAFE LOADER */}
       <div

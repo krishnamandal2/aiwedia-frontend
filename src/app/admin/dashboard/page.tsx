@@ -43,6 +43,25 @@ export default function Dashboard() {
     init();
   }, [router]);
 
+  const publishAllDrafts = async () => {
+    if (!confirm("Publish all draft posts? They will appear on /blog.")) return;
+    const res = await fetch(`${API}/api/blogs/publish-drafts`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      alert(data.message || "Failed to publish drafts");
+      return;
+    }
+    setBlogs((prev) =>
+      prev.map((b) =>
+        b.status === "draft" ? { ...b, status: "published" as const } : b
+      )
+    );
+    alert(`Published ${data.modified ?? 0} draft(s). View them at /blog`);
+  };
+
   // 🗑 Delete blog
   const deleteBlog = async (id: string) => {
     if (!confirm("Delete this blog?")) return;
@@ -101,15 +120,44 @@ export default function Dashboard() {
         <StatCard title="Drafts" value={drafts} />
       </div>
 
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/admin/manage"
+          className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
+        >
+          Content hub (guides, comparisons, tools) →
+        </Link>
+        <Link
+          href="/admin/submissions"
+          className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
+        >
+          Review tool submissions →
+        </Link>
+      </div>
+
       {/* Actions */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <h2 className="text-xl font-semibold">Blogs</h2>
 
-        <Link href="/admin/blogs/new">
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded">
-            ➕ New Blog
-          </button>
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          {drafts > 0 && (
+            <button
+              type="button"
+              onClick={publishAllDrafts}
+              className="rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+            >
+              Publish {drafts} draft{drafts === 1 ? "" : "s"}
+            </button>
+          )}
+          <Link href="/blog" className="rounded border px-4 py-2 text-sm font-semibold hover:bg-gray-50">
+            View public blog →
+          </Link>
+          <Link href="/admin/blogs/new">
+            <button className="rounded bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+              New blog
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Table */}

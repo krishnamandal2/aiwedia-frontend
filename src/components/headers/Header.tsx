@@ -1,19 +1,19 @@
 import HeaderClient from "./HeaderClient";
-import MegaExploreClient from "@/megamenu/MegaExploreClient";
-import Smalldevicemenu from "@/components/mobilemenu/Smalldevicemenu";
 import { getMenuCategories } from "@/lib/api";
+import { withMenuFallback } from "@/lib/fallbackMenuCategories";
+import type { MenuCategory } from "@/lib/megaMenuUtils";
+
+export const revalidate = 600;
 
 export default async function Header() {
   const res = await getMenuCategories();
+  const raw: MenuCategory[] = Array.isArray(res?.categories)
+    ? (res.categories as MenuCategory[])
+    : Array.isArray(res)
+      ? (res as MenuCategory[])
+      : [];
 
-  const categories = Array.isArray(res?.categories)
-    ? res.categories
-    : [];
+  const categories = withMenuFallback(raw);
 
-  return (
-    <HeaderClient
-      megaMenu={<MegaExploreClient categories={categories} />}
-      mobileMenu={<Smalldevicemenu categories={categories} />}
-    />
-  );
+  return <HeaderClient categories={categories} />;
 }

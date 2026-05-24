@@ -1,6 +1,18 @@
 import { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo/site";
 
-const BASE_URL = "https://aiwedia.com";
+const BASE_URL = SITE_URL;
+
+/** Higher priority in sitemap for money/traffic pages */
+const HIGH_PRIORITY_SLUGS = new Set([
+  "ai-tools",
+  "ai-code-generators",
+  "ai-seo-tools",
+  "ai-marketing-tools",
+  "ai-agents-automation",
+  "ai-image-generators",
+  "ai-writing-tools",
+]);
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /* =========================
@@ -59,9 +71,10 @@ async function safeFetch(url: string) {
 ========================= */
 
 async function fetchBlogs() {
-  return await safeFetch(
-    `${API_URL}/api/blogs/public`
-  );
+  const data = (await safeFetch(
+    `${API_URL}/api/blogs/public?page=1&limit=500`
+  )) as { blogs?: { slug: string }[] } | null;
+  return data?.blogs ?? [];
 }
 
 async function fetchCategories() {
@@ -76,6 +89,75 @@ async function fetchTools() {
   );
 }
 
+const BEST_GUIDE_SLUGS = [
+  "ai-seo-tools",
+  "ai-coding-tools",
+  "free-download-tools",
+  "ai-agents",
+  "ai-content-creator-tools",
+  "ai-video-description-tools",
+  "ai-thumbnail-design-tools",
+  "ai-podcast-tools",
+  "ai-presentation-tools",
+];
+
+async function fetchComparisonSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/comparisons`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.comparisons || []).map((c: { slug: string }) => c.slug);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchCollectionSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/collections`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.collections || []).map((c: { slug: string }) => c.slug);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchAiToolDetailUrls() {
+  const urls: MetadataRoute.Sitemap = [];
+  const slugs = Array.from(HIGH_PRIORITY_SLUGS);
+
+  await Promise.all(
+    slugs.map(async (catSlug) => {
+      try {
+        const res = await fetch(`${API_URL}/api/categories/${catSlug}`, {
+          next: { revalidate: 86400 },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const tools = data.tools || [];
+        for (const t of tools) {
+          if (!t.slug) continue;
+          urls.push({
+            url: `${BASE_URL}/tool/${catSlug}/${t.slug}`,
+            lastModified: new Date("2026-05-22"),
+            changeFrequency: "weekly" as const,
+            priority: 0.78,
+          });
+        }
+      } catch {
+        /* skip category */
+      }
+    })
+  );
+
+  return urls;
+}
+
 /* =========================
    MAIN SITEMAP
 ========================= */
@@ -85,6 +167,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogs = await fetchBlogs();
   const categories = await fetchCategories();
   const tools = await fetchTools();
+  const collectionSlugs = await fetchCollectionSlugs();
+  const comparisonSlugs = await fetchComparisonSlugs();
+  const toolDetailUrls = await fetchAiToolDetailUrls();
 
   console.log("Blogs:", blogs.length);
   console.log("Categories:", categories.length);
@@ -122,6 +207,62 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date("2026-01-01"),
       changeFrequency: "daily",
       priority: 0.9,
+    },
+
+    {
+      url: `${BASE_URL}/ai-directory`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+
+    {
+      url: `${BASE_URL}/web-directory`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+
+    {
+      url: `${BASE_URL}/best`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+
+    {
+      url: `${BASE_URL}/collections`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+
+    {
+      url: `${BASE_URL}/suggest-tool`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+
+    {
+      url: `${BASE_URL}/compare`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.88,
+    },
+
+    {
+      url: `${BASE_URL}/category/ai-seo-tools`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.92,
+    },
+
+    {
+      url: `${BASE_URL}/category/ai-code-generators`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.92,
     },
 
     {
@@ -173,30 +314,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      CATEGORY URLS
   ========================= */
 
-  const categoryUrls = categories.map((cat: any) => ({
+  const categoryUrls = categories.map((cat: { slug: string; updatedAt?: string }) => ({
     url: `${BASE_URL}/category/${cat.slug}`,
-
-    lastModified: safeDate(
-      cat.updatedAt
-    ),
-
+    lastModified: safeDate(cat.updatedAt),
     changeFrequency: "weekly" as const,
-    priority: 0.7,
+    priority: HIGH_PRIORITY_SLUGS.has(cat.slug)
+      ? 0.88
+      : cat.slug?.startsWith("ai-")
+        ? 0.82
+        : 0.7,
   }));
 
   /* =========================
      TOOL URLS
   ========================= */
 
-  const toolUrls = tools.map((tool: any) => ({
+  const toolUrls = tools.map((tool: { slug: string; updatedAt?: string }) => ({
     url: `${BASE_URL}/tools/${tool.slug}`,
-
-    lastModified: safeDate(
-      tool.updatedAt
-    ),
-
+    lastModified: safeDate(tool.updatedAt),
     changeFrequency: "weekly" as const,
-    priority: 0.7,
+    priority: 0.75,
+  }));
+
+  const bestGuideUrls = BEST_GUIDE_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/best/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "weekly" as const,
+    priority: 0.88,
+  }));
+
+  const collectionUrls = collectionSlugs.map((slug) => ({
+    url: `${BASE_URL}/collections/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const comparisonUrls = comparisonSlugs.map((slug) => ({
+    url: `${BASE_URL}/compare/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
   }));
 
   /* =========================
@@ -208,5 +366,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryUrls,
     ...blogUrls,
     ...toolUrls,
+    ...bestGuideUrls,
+    ...collectionUrls,
+    ...comparisonUrls,
+    ...toolDetailUrls,
   ];
 }

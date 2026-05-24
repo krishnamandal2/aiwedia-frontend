@@ -24,11 +24,15 @@ type BlogPageProps = {
 };
 
 // ================= FETCH =================
+export const dynamic = "force-dynamic";
+
 async function getBlog(slug: string): Promise<Blog | null> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public/${slug}`,
-    { next: { revalidate: 60 } }
-  );
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  if (!base) return null;
+
+  const res = await fetch(`${base}/api/blogs/public/${encodeURIComponent(slug)}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) return null;
 
@@ -36,14 +40,18 @@ async function getBlog(slug: string): Promise<Blog | null> {
 }
 
 async function getBlogs(): Promise<Blog[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/blogs/public`,
-    { next: { revalidate: 60 } }
-  );
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  if (!base) return [];
+
+  const res = await fetch(`${base}/api/blogs/public?page=1&limit=50`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) return [];
 
-  return res.json();
+  const data = await res.json();
+  if (Array.isArray(data)) return data;
+  return data.blogs ?? [];
 }
 
 // ================= METADATA =================
@@ -60,6 +68,8 @@ export async function generateMetadata(
     };
   }
 
+  const image = blog.fullImage || blog.image;
+
   return {
     title: blog.title,
     description: blog.summary,
@@ -67,22 +77,21 @@ export async function generateMetadata(
       canonical: `https://aiwedia.com/blog/${blog.slug}`,
     },
     openGraph: {
+      type: "article",
+      publishedTime: blog.createdAt,
+      modifiedTime: blog.updatedAt,
       title: blog.title,
       description: blog.summary,
       url: `https://aiwedia.com/blog/${blog.slug}`,
-      images: [
-        {
-          url: blog.fullImage || blog.image || "/og-image.png",
-          width: 1200,
-          height: 630,
-        },
-      ],
+      images: image
+        ? [{ url: image, width: 1200, height: 630, alt: blog.title }]
+        : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: blog.title,
       description: blog.summary,
-      images: [blog.fullImage || blog.image || "/og-image.png"],
+      images: image ? [image] : undefined,
     },
   };
 }
@@ -125,24 +134,29 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "BlogPosting",
             headline: blog.title,
             description: blog.summary,
             image: blog.fullImage || blog.image,
+            url: `https://aiwedia.com/blog/${blog.slug}`,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://aiwedia.com/blog/${blog.slug}`,
+            },
             author: {
               "@type": "Person",
               name: "Krishna",
             },
             publisher: {
               "@type": "Organization",
-              name: "Aiwedia",
+              name: "AIWedia",
               logo: {
                 "@type": "ImageObject",
                 url: "https://aiwedia.com/favicon.png",
               },
             },
-            datePublished: blog.createdAt,
-            dateModified: blog.updatedAt,
+            datePublished: blog.createdAt || blog.date,
+            dateModified: blog.updatedAt || blog.createdAt || blog.date,
           }),
         }}
       />

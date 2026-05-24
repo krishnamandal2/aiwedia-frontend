@@ -1,89 +1,83 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowUpRight, Calendar } from "lucide-react";
 
-type BlogCardProps = {
+export type BlogCardItem = {
   slug: string;
   title: string;
   summary: string;
   image?: string;
   date: string;
   category?: string;
-  readingTime?: string;
 };
 
-export default function BlogCard({
-  slug,
-  title,
-  summary,
-  image,
-  date,
-  category = "Article",
-  readingTime = "5 min read",
-}: BlogCardProps) {
+type BlogCardProps = BlogCardItem & {
+  /** Legacy: pass full blog object from API */
+  blog?: BlogCardItem;
+};
+
+function formatDate(dateStr: string) {
+  try {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
+export default function BlogCard(props: BlogCardProps) {
+  const data = props.blog ?? props;
+  const {
+    slug,
+    title,
+    summary,
+    image,
+    date,
+    category = "AI & Tools",
+  } = data;
+
+  if (!slug || !title) return null;
   return (
     <Link href={`/blog/${slug}`} className="group block h-full">
-      <article className="flex flex-col h-full overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-2xl transition-all duration-300">
-
-        {/* Image */}
-        <div className="relative h-56 w-full overflow-hidden">
+      <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] transition duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-900/20">
+        <div className="relative aspect-[16/10] overflow-hidden">
           <Image
-            src={image || "/default-blog.jpg"}
+            src={
+              image ||
+              "https://res.cloudinary.com/dj3vrogpl/image/upload/v1768645475/aitools_wn5tnv.jpg"
+            }
             alt={title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition duration-500 group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-
-          {/* Category */}
-          <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-blue-600">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06060c] via-transparent to-transparent" />
+          <span className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/40 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-200 backdrop-blur-md">
             {category}
           </span>
         </div>
 
-        {/* Content */}
-        <div className="flex flex-col flex-1 p-6">
+        <div className="flex flex-1 flex-col p-5">
+          <div className="mb-2 flex items-center gap-1.5 text-[11px] text-slate-500">
+            <Calendar size={12} />
+            {formatDate(date)}
+          </div>
 
-          {/* Title */}
-          <h2 className="text-xl font-semibold text-gray-900 leading-snug group-hover:text-blue-600 transition">
+          <h2 className="line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-violet-200">
             {title}
           </h2>
 
-          {/* Summary */}
-          <p className="text-gray-600 text-sm mt-3 line-clamp-3 leading-relaxed">
+          <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-400">
             {summary}
           </p>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-
-            {/* Date + Reading Time */}
-            <div className="text-xs text-gray-400 flex gap-2">
-              <span>{date}</span>
-              <span>•</span>
-              <span>{readingTime}</span>
-            </div>
-
-            {/* Read More */}
-            <span className="flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:gap-2 transition-all">
-              Read
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </span>
-
-          </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-violet-400 transition group-hover:gap-2 group-hover:text-violet-300">
+            Read article
+            <ArrowUpRight size={16} />
+          </span>
         </div>
       </article>
     </Link>

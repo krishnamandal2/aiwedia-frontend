@@ -27,7 +27,7 @@ export default function DesktopHeader({ megaMenu }: { megaMenu: React.ReactNode 
 
   return (
     <header
-      className={`sticky top-0 z-[999] transition-all duration-300 ${
+      className={`sticky top-0 z-[999] overflow-visible transition-all duration-300 ${
         isScrolled
           ? "bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
           : "bg-white/90 backdrop-blur-sm border-b border-slate-100"
@@ -50,7 +50,7 @@ export default function DesktopHeader({ megaMenu }: { megaMenu: React.ReactNode 
             aria-label="Call us"
           >
             <Phone size={13} className="text-indigo-500" />
-            <span>+91-9818521688</span>
+            <span>+91-9783152203</span>
           </a>
         </div>
 
@@ -66,8 +66,8 @@ export default function DesktopHeader({ megaMenu }: { megaMenu: React.ReactNode 
       </div>
 
       {/* Main Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-4 md:px-6 xl:px-12 py-4 min-h-[4.5rem]">
-        <div className="flex items-center gap-4">
+      <div className="relative flex flex-wrap items-center justify-between gap-3 overflow-visible px-4 py-3 md:px-6 xl:px-12 min-h-[3.5rem]">
+        <div className="relative flex items-center gap-4 overflow-visible">
           <Link
             href="/"
             onClick={scrollToTop}

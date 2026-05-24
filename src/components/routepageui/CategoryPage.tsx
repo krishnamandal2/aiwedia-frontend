@@ -5,10 +5,12 @@ import {
   ArrowLeft,
   ChevronRight,
 } from "lucide-react";
-import { CategoryResponse } from "@/lib/api";
+import type { CategoryResponse } from "@/lib/types";
 import ToolsGrid from "./ToolsGrid";
 import { formatCategoryTitle } from "@/lib/formatTitle";
 import { Suspense } from "react";
+import AiToolsPlatform from "@/components/aitools/AiToolsPlatform";
+import CategoryExtras from "@/components/category/CategoryExtras";
 
 export default function CategoryPage({
   data,
@@ -18,6 +20,24 @@ export default function CategoryPage({
   slug: string;
 }) {
   const tools = data.tools ?? [];
+  const displayTitle = formatCategoryTitle(
+    data.title ?? slug.replace(/-/g, " ")
+  );
+
+  if (tools.length > 0) {
+    return (
+      <>
+        <AiToolsPlatform
+          tools={tools}
+          title={displayTitle}
+          categorySlug={slug}
+          seoDescription={data.description}
+        />
+        <CategoryExtras data={data} />
+      </>
+    );
+  }
+
   const displayName = formatCategoryTitle(
     data.title ?? slug.replace(/-/g, " ")
   );
@@ -34,7 +54,7 @@ export default function CategoryPage({
   return (
     <div className="min-h-screen bg-[#FAFAFB] text-slate-900 font-sans">
       {/* ================= NAV ================= */}
-      <header className="sticky top-0 z-10 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
+      <header className="sticky top-[var(--site-header-height,3.5rem)] z-10 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex h-14 items-center">
             <nav className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 overflow-hidden">
@@ -57,7 +77,7 @@ export default function CategoryPage({
       </header>
 
       {/* ================= HERO ================= */}
-      <section className="relative pt-16 sm:pt-20 pb-24 sm:pb-32 overflow-hidden">
+      <section className="relative overflow-hidden pt-10 pb-16 sm:pt-16 sm:pb-24 md:pt-20 md:pb-32">
         {/* Decorative blobs - reduced motion friendly */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-indigo-100/40 blur-[120px] will-change-transform" />

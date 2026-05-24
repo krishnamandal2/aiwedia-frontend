@@ -1,0 +1,11 @@
+# https://aiwedia.com/robots.txt
+# Next.js also serves dynamic robots from /robots — this file is a fallback for some crawlers.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+
+Sitemap: https://aiwedia.com/sitemap.xml

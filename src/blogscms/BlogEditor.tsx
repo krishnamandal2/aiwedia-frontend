@@ -10,264 +10,366 @@ import { TableHeader } from "@tiptap/extension-table";
 import TextAlign from "@tiptap/extension-text-align";
 import CodeBlock from "@tiptap/extension-code-block";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import { useEffect, useState } from "react";
+import Placeholder from "@tiptap/extension-placeholder";
+import { useEffect, useState, useCallback } from "react";
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Quote,
+  Link2,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Minus,
+  Table2,
+  Undo2,
+  Redo2,
+  RemoveFormatting,
+} from "lucide-react";
 
 interface Props {
   value: string;
   onChange: (content: string) => void;
 }
 
+function ToolbarBtn({
+  onClick,
+  active,
+  title,
+  children,
+}: {
+  onClick: () => void;
+  active?: boolean;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      title={title}
+      onClick={onClick}
+      className={`flex h-8 w-8 items-center justify-center rounded-lg transition ${
+        active
+          ? "bg-violet-600 text-white shadow-sm"
+          : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ToolbarDivider() {
+  return <div className="mx-1 h-6 w-px bg-slate-200" />;
+}
+
 export default function BlogEditor({ value, onChange }: Props) {
   const [mounted, setMounted] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
-        codeBlock: false, // we'll use the standalone CodeBlock extension
+        codeBlock: false,
       }),
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: { class: "text-blue-600 underline" },
+        HTMLAttributes: {
+          class: "text-violet-600 underline underline-offset-2",
+        },
       }),
-      Table.configure({
-        resizable: true,
-        HTMLAttributes: { class: "min-w-full border-collapse border border-gray-300" },
-      }),
+      Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
       TableCell,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       CodeBlock.configure({
-        HTMLAttributes: { class: "bg-gray-100 p-3 rounded-md font-mono text-sm" },
+        HTMLAttributes: {
+          class:
+            "rounded-lg bg-slate-900 text-slate-100 p-4 font-mono text-sm my-4",
+        },
       }),
       HorizontalRule,
+      Placeholder.configure({
+        placeholder: "Start writing your article… Use headings, lists, links, and tables.",
+      }),
     ],
-    content: value || "<p></p>",
+    content: value || "",
     immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          "prose-editor min-h-[420px] max-w-none px-6 py-5 focus:outline-none text-slate-800 leading-relaxed",
+      },
+    },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      onChange(html);
+      const text = editor.getText().trim();
+      setWordCount(text ? text.split(/\s+/).length : 0);
     },
   });
 
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value);
+      editor.commands.setContent(value || "", { emitUpdate: false });
+      const text = editor.getText().trim();
+      setWordCount(text ? text.split(/\s+/).length : 0);
     }
   }, [value, editor]);
 
-  if (!mounted || !editor) return null;
-
-  // Helper to add/remove link
-  const setLink = () => {
-    const previousUrl = editor.getAttributes("link").href;
-    const url = window.prompt("Enter URL", previousUrl);
+  const setLink = useCallback(() => {
+    if (!editor) return;
+    const prev = editor.getAttributes("link").href;
+    const url = window.prompt("Link URL", prev || "https://");
     if (url === null) return;
     if (url === "") {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  };
+  }, [editor]);
 
-  // Table helpers
-  const insertTable = () => {
-    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
-  };
-  const addColumnBefore = () => editor.chain().focus().addColumnBefore().run();
-  const addColumnAfter = () => editor.chain().focus().addColumnAfter().run();
-  const deleteColumn = () => editor.chain().focus().deleteColumn().run();
-  const addRowBefore = () => editor.chain().focus().addRowBefore().run();
-  const addRowAfter = () => editor.chain().focus().addRowAfter().run();
-  const deleteRow = () => editor.chain().focus().deleteRow().run();
-  const deleteTable = () => editor.chain().focus().deleteTable().run();
+  if (!mounted || !editor) {
+    return (
+      <div className="flex h-[520px] items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-sm text-slate-500">
+        Loading editor…
+      </div>
+    );
+  }
 
   return (
-    <div className="border rounded-lg shadow-sm bg-white flex flex-col h-[600px]">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-900/5">
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-1 p-2 border-b bg-gray-50 sticky top-0 z-20">
-        {/* Headings */}
-        <button
-          type="button"
+      <div className="flex flex-wrap items-center gap-0.5 border-b border-slate-200 bg-slate-50/90 px-2 py-2">
+        <ToolbarBtn
+          title="Undo"
+          onClick={() => editor.chain().focus().undo().run()}
+        >
+          <Undo2 size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Redo"
+          onClick={() => editor.chain().focus().redo().run()}
+        >
+          <Redo2 size={16} />
+        </ToolbarBtn>
+        <ToolbarDivider />
+
+        <ToolbarBtn
+          title="Heading 1"
+          active={editor.isActive("heading", { level: 1 })}
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("heading", { level: 1 }) ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          H1
-        </button>
-        <button
-          type="button"
+          <Heading1 size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Heading 2"
+          active={editor.isActive("heading", { level: 2 })}
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("heading", { level: 2 }) ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          H2
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("paragraph") ? "bg-black text-white" : "bg-white"
-          }`}
+          <Heading2 size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Heading 3"
+          active={editor.isActive("heading", { level: 3 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         >
-          P
-        </button>
+          <Heading3 size={16} />
+        </ToolbarBtn>
+        <ToolbarDivider />
 
-        {/* Basic formatting */}
-        <button
-          type="button"
+        <ToolbarBtn
+          title="Bold"
+          active={editor.isActive("bold")}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`px-3 py-1 text-sm border rounded font-bold ${
-            editor.isActive("bold") ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          B
-        </button>
-        <button
-          type="button"
+          <Bold size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Italic"
+          active={editor.isActive("italic")}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-3 py-1 text-sm border rounded italic ${
-            editor.isActive("italic") ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          I
-        </button>
-
-        {/* Link */}
-        <button
-          type="button"
-          onClick={setLink}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("link") ? "bg-black text-white" : "bg-white"
-          }`}
+          <Italic size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Strikethrough"
+          active={editor.isActive("strike")}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
         >
-          🔗 Link
-        </button>
+          <Strikethrough size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Inline code"
+          active={editor.isActive("code")}
+          onClick={() => editor.chain().focus().toggleCode().run()}
+        >
+          <Code size={16} />
+        </ToolbarBtn>
+        <ToolbarDivider />
 
-        {/* Lists */}
-        <button
-          type="button"
+        <ToolbarBtn
+          title="Bullet list"
+          active={editor.isActive("bulletList")}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("bulletList") ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          • List
-        </button>
-        <button
-          type="button"
+          <List size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Numbered list"
+          active={editor.isActive("orderedList")}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("orderedList") ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          1. List
-        </button>
+          <ListOrdered size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Quote"
+          active={editor.isActive("blockquote")}
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        >
+          <Quote size={16} />
+        </ToolbarBtn>
+        <ToolbarDivider />
 
-        {/* Text align */}
-        <button
-          type="button"
+        <ToolbarBtn title="Link" active={editor.isActive("link")} onClick={setLink}>
+          <Link2 size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Align left"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className="px-3 py-1 text-sm border rounded bg-white"
         >
-          ←
-        </button>
-        <button
-          type="button"
+          <AlignLeft size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Align center"
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className="px-3 py-1 text-sm border rounded bg-white"
         >
-          ↔
-        </button>
-        <button
-          type="button"
+          <AlignCenter size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Align right"
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className="px-3 py-1 text-sm border rounded bg-white"
         >
-          →
-        </button>
+          <AlignRight size={16} />
+        </ToolbarBtn>
+        <ToolbarDivider />
 
-        {/* Code block */}
-        <button
-          type="button"
+        <ToolbarBtn
+          title="Code block"
+          active={editor.isActive("codeBlock")}
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`px-3 py-1 text-sm border rounded ${
-            editor.isActive("codeBlock") ? "bg-black text-white" : "bg-white"
-          }`}
         >
-          &lt;/&gt;
-        </button>
-
-        {/* Horizontal rule */}
-        <button
-          type="button"
+          <Code size={16} className="opacity-80" />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Divider"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="px-3 py-1 text-sm border rounded bg-white"
         >
-          ―
-        </button>
+          <Minus size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Insert table"
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+              .run()
+          }
+        >
+          <Table2 size={16} />
+        </ToolbarBtn>
+        <ToolbarBtn
+          title="Clear formatting"
+          onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+        >
+          <RemoveFormatting size={16} />
+        </ToolbarBtn>
 
-        {/* Table dropdown */}
-        <div className="relative group">
-          <button className="px-3 py-1 text-sm border rounded bg-white">📊 Table</button>
-          <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg hidden group-hover:block z-20 min-w-[160px]">
-            <button onClick={insertTable} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Insert Table (3x3)
-            </button>
-            <button onClick={addColumnBefore} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Add Column Before
-            </button>
-            <button onClick={addColumnAfter} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Add Column After
-            </button>
-            <button onClick={deleteColumn} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Delete Column
-            </button>
-            <button onClick={addRowBefore} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Add Row Before
-            </button>
-            <button onClick={addRowAfter} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Add Row After
-            </button>
-            <button onClick={deleteRow} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100">
-              Delete Row
-            </button>
-            <button onClick={deleteTable} className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-100 text-red-600">
-              Delete Table
-            </button>
-          </div>
-        </div>
+        <span className="ml-auto hidden text-[11px] font-medium text-slate-400 sm:inline">
+          {wordCount} words
+        </span>
       </div>
 
-      {/* Editor Content with reduced gap styling */}
-     <div className="flex-1 overflow-y-auto">
-  <EditorContent
-    editor={editor}
-    className="tiptap p-5 min-h-full outline-none
-      [&_p]:mb-2
-      [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-3
-      [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mb-2
-      [&_h3]:text-xl [&_h3]:font-medium [&_h3]:mb-2
-      [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-3
-      [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-3
-      [&_li]:mb-0.5
-      [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-2
-      [&_hr]:my-4
-      [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:rounded [&_pre]:text-sm
-      [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:rounded
-      [&_a]:text-blue-600 [&_a]:underline
-      [&_table]:w-full [&_table]:border-collapse [&_table]:my-4
-      [&_th]:border [&_th]:border-gray-300 [&_th]:px-3 [&_th]:py-2 [&_th]:bg-gray-100 [&_th]:font-semibold
-      [&_td]:border [&_td]:border-gray-300 [&_td]:px-3 [&_td]:py-2
-    "
-  />
-</div>
+      <div className="max-h-[min(60vh,560px)] overflow-y-auto bg-white">
+        <EditorContent editor={editor} />
+      </div>
+
+      <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/80 px-4 py-2 text-[11px] text-slate-500">
+        <span>Professional editor · Tables, links, code blocks</span>
+        <span className="sm:hidden">{wordCount} words</span>
+      </div>
+
+      <style jsx global>{`
+        .prose-editor h1 {
+          font-size: 1.875rem;
+          font-weight: 800;
+          margin: 1.25rem 0 0.75rem;
+          line-height: 1.2;
+        }
+        .prose-editor h2 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin: 1rem 0 0.5rem;
+        }
+        .prose-editor h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0.75rem 0 0.5rem;
+        }
+        .prose-editor p {
+          margin: 0.5rem 0;
+        }
+        .prose-editor ul {
+          list-style: disc;
+          padding-left: 1.5rem;
+          margin: 0.75rem 0;
+        }
+        .prose-editor ol {
+          list-style: decimal;
+          padding-left: 1.5rem;
+          margin: 0.75rem 0;
+        }
+        .prose-editor blockquote {
+          border-left: 4px solid #8b5cf6;
+          padding-left: 1rem;
+          margin: 1rem 0;
+          color: #64748b;
+          font-style: italic;
+        }
+        .prose-editor table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 1rem 0;
+        }
+        .prose-editor th,
+        .prose-editor td {
+          border: 1px solid #e2e8f0;
+          padding: 0.5rem 0.75rem;
+        }
+        .prose-editor th {
+          background: #f8fafc;
+          font-weight: 600;
+        }
+        .ProseMirror p.is-editor-empty:first-child::before {
+          color: #94a3b8;
+          content: attr(data-placeholder);
+          float: left;
+          height: 0;
+          pointer-events: none;
+        }
+      `}</style>
     </div>
   );
 }
