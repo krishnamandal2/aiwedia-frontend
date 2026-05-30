@@ -13,7 +13,14 @@ const HIGH_PRIORITY_SLUGS = new Set([
   "ai-image-generators",
   "ai-writing-tools",
 ]);
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL =
+  process.env.API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:7300";
+
+function asArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? value : [];
+}
 
 /* =========================
    SAFE DATE HANDLER
@@ -164,16 +171,18 @@ async function fetchAiToolDetailUrls() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
-  const blogs = await fetchBlogs();
-  const categories = await fetchCategories();
-  const tools = await fetchTools();
+  const blogs = asArray<{ slug: string; updatedAt?: string; createdAt?: string }>(
+    await fetchBlogs()
+  );
+  const categories = asArray<{ slug: string; updatedAt?: string }>(
+    await fetchCategories()
+  );
+  const tools = asArray<{ slug: string; updatedAt?: string }>(
+    await fetchTools()
+  );
   const collectionSlugs = await fetchCollectionSlugs();
   const comparisonSlugs = await fetchComparisonSlugs();
   const toolDetailUrls = await fetchAiToolDetailUrls();
-
-  console.log("Blogs:", blogs.length);
-  console.log("Categories:", categories.length);
-  console.log("Tools:", tools.length);
 
   /* =========================
      STATIC PAGES

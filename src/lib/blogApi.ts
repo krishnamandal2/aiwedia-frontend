@@ -17,11 +17,6 @@ export type BlogPagination = {
 
 const BASE = process.env.NEXT_PUBLIC_API_URL;
 
-function apiHeaders(): HeadersInit {
-  const key = process.env.INTERNAL_API_KEY;
-  return key ? { "x-internal-api-key": key } : {};
-}
-
 const emptyPagination = (limit: number): BlogPagination => ({
   page: 1,
   limit,
@@ -77,7 +72,7 @@ export async function getPublicBlogs(
   try {
     const res = await fetch(
       `${BASE}/api/blogs/public?page=${page}&limit=${limit}`,
-      { cache: "no-store", headers: apiHeaders() }
+      { cache: "no-store" }
     );
 
     if (!res.ok) {
@@ -97,7 +92,6 @@ export async function getAllPublicBlogsForSitemap(): Promise<BlogListItem[]> {
   if (!BASE) return [];
   const res = await fetch(`${BASE}/api/blogs/public?page=1&limit=500`, {
     next: { revalidate: 3600 },
-    headers: apiHeaders(),
   });
   if (!res.ok) return [];
   const data = await res.json();

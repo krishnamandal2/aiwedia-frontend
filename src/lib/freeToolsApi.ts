@@ -14,11 +14,6 @@ export interface FreeToolListItem {
   tags?: string[];
 }
 
-function apiHeaders(): HeadersInit {
-  const key = process.env.INTERNAL_API_KEY;
-  return key ? { "x-internal-api-key": key } : {};
-}
-
 function staticFallbackList(): FreeToolListItem[] {
   return FREE_DOWNLOAD_TRENDING.map((t, i) => ({
     slug: t.slug,
@@ -36,7 +31,6 @@ export async function fetchFreeToolsList(): Promise<FreeToolListItem[]> {
   try {
     const res = await fetch(`${base}/api/free-tools`, {
       next: { revalidate: 300 },
-      headers: apiHeaders(),
     });
 
     if (!res.ok) return staticFallbackList();
@@ -60,7 +54,7 @@ export async function getFreeToolBySlug(
     try {
       const res = await fetch(
         `${base}/api/free-tools/${encodeURIComponent(slug)}`,
-        { cache: "no-store", headers: apiHeaders() }
+        { cache: "no-store" }
       );
 
       if (res.ok) {

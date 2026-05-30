@@ -1,11 +1,8 @@
 /** Server/client safe fetch helpers — prefer `@/lib/api` in Server Components. */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL;
+import { clientApiUrl } from "./clientApi";
 
-function apiHeaders(): HeadersInit {
-  const key = process.env.INTERNAL_API_KEY;
-  return key ? { "x-internal-api-key": key } : {};
-}
+const BASE = process.env.NEXT_PUBLIC_API_URL;
 
 export type RecentToolItem = {
   slug: string;
@@ -24,7 +21,6 @@ export async function fetchRecentTools(days = 30, limit = 12) {
       `${BASE}/api/tools/recent?days=${days}&limit=${limit}`,
       {
         next: { revalidate: 120 },
-        headers: apiHeaders(),
       }
     );
     if (!res.ok) {
@@ -50,12 +46,12 @@ export async function fetchToolDetail(categorySlug: string, toolSlug: string) {
   try {
     const res = await fetch(
       `${BASE}/api/tools/${encodeURIComponent(categorySlug)}/${encodeURIComponent(toolSlug)}`,
-      { cache: "no-store", headers: apiHeaders() }
+      { cache: "no-store" }
     );
     if (res.ok) return res.json();
     const fallback = await fetch(
       `${BASE}/api/tools/by-slug/${encodeURIComponent(toolSlug)}`,
-      { cache: "no-store", headers: apiHeaders() }
+      { cache: "no-store" }
     );
     if (!fallback.ok) return null;
     return fallback.json();
@@ -124,7 +120,7 @@ export async function syncFavorites(
   token: string,
   favorites: { categorySlug: string; toolSlug: string }[]
 ) {
-  const res = await fetch(`${BASE}/api/favorites`, {
+  const res = await fetch(clientApiUrl("/api/favorites"), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -137,7 +133,7 @@ export async function syncFavorites(
 }
 
 export async function getFavorites(token: string) {
-  const res = await fetch(`${BASE}/api/favorites`, {
+  const res = await fetch(clientApiUrl("/api/favorites"), {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) return { favorites: [] };

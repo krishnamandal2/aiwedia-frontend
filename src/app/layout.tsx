@@ -4,7 +4,6 @@ import "@/app/globals.css";
 import Header from "@/components/headers/Header";
 import Footer from "@/components/footer/Footer";
 import Providers from "@/components/toastui/Providers"
-// import Chatbot from "@/Aichartbot/Chatbot";
 import ScrollToTopButton from "@/components/topbutton/ScrollToTopButton";
 import Chatllm from "@/LLMChatboat/Chatllm";
 
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
   },
 
    verification: {
-    google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M",
+    google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M"
   },
 
   title: {

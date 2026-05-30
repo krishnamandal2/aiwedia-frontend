@@ -3,6 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import RegisterForm from "@/contactsform/RegisterForm";
+import { clientApiUrl } from "@/lib/clientApi";
 
 export default function RegisterPage() {
 
@@ -52,9 +53,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
-        {
+      const res = await fetch(clientApiUrl("/api/auth/register"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { MessageCircle, Send, Bot, X, ExternalLink } from "lucide-react";
 import ChatMessageContent from "@/components/chat/ChatMessageContent";
+import { clientApiUrl } from "@/lib/clientApi";
 
 type ChatLink = { title: string; url: string; type?: string };
 
@@ -88,9 +89,7 @@ export default function Chatllm() {
       ]);
 
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/chatllm`,
-          {
+        const res = await fetch(clientApiUrl("/api/chatllm"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userText }),

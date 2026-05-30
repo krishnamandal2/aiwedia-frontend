@@ -12,8 +12,6 @@ if (!BASE_URL) {
   throw new Error("❌ NEXT_PUBLIC_API_URL is not set");
 }
 
-const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY;
-
 const DEFAULT_SITE_CONFIG: Record<string, unknown> = {
   home_quick_links: [
     { href: "/category/ai-tools", label: "AI Tools", desc: "ChatGPT, image AI, coding assistants", icon: "ai" },
@@ -36,16 +34,10 @@ const DEFAULT_SITE_CONFIG: Record<string, unknown> = {
   ],
 };
 
-function apiHeaders(): HeadersInit {
-  if (!INTERNAL_API_KEY) return {};
-  return { "x-internal-api-key": INTERNAL_API_KEY };
-}
-
 async function safeFetchInner<T>(url: string): Promise<T | null> {
   try {
     const res = await fetch(url, {
       next: { revalidate: 3600 },
-      headers: apiHeaders(),
     });
 
     if (!res.ok) {
@@ -251,7 +243,6 @@ export async function getAllTools() {
   try {
     const res = await fetch(`${BASE_URL}/api/free-tools`, {
       next: { revalidate: 60 },
-      headers: apiHeaders(),
     });
     if (!res.ok) return [];
     const data = await res.json();
@@ -265,7 +256,6 @@ export async function getToolBySlug(slug: string) {
   try {
     const res = await fetch(`${BASE_URL}/api/free-tools/${slug}`, {
       next: { revalidate: 60 },
-      headers: apiHeaders(),
     });
 
     if (!res.ok) return null;
@@ -334,7 +324,7 @@ export async function resolveToolDetail(
   try {
     const res = await fetch(
       `${BASE_URL}/api/tools/${encodeURIComponent(cat)}/${encodeURIComponent(slug)}`,
-      { cache: "no-store", headers: apiHeaders() }
+      { cache: "no-store" }
     );
     if (res.ok) {
       const data = (await res.json()) as ToolDetailPayload;
@@ -347,7 +337,7 @@ export async function resolveToolDetail(
   try {
     const bySlug = await fetch(
       `${BASE_URL}/api/tools/by-slug/${encodeURIComponent(slug)}`,
-      { cache: "no-store", headers: apiHeaders() }
+      { cache: "no-store" }
     );
     if (bySlug.ok) {
       const data = (await bySlug.json()) as ToolDetailPayload;
@@ -384,7 +374,7 @@ export async function getVerifiedRecentTools(
   try {
     const res = await fetch(
       `${BASE_URL}/api/tools/recent?days=${days}&limit=${limit}`,
-      { next: { revalidate: 120 }, headers: apiHeaders() }
+      { next: { revalidate: 120 } }
     );
     if (res.ok) {
       const data = await res.json();

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Globe, LayoutGrid, Loader2, X } from "lucide-react";
+import { clientApiUrl } from "@/lib/clientApi";
 
 interface SearchResultItem {
   type: "tool" | "category";
@@ -33,7 +34,9 @@ const SearchBar = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search?q=${encodeURIComponent(q)}`);
+      const res = await fetch(
+        `${clientApiUrl("/api/search")}?q=${encodeURIComponent(q)}`
+      );
       if (!res.ok) throw new Error(`API Error ${res.status}`);
       const data: SearchResultItem[] = await res.json();
       setResults(data || []);
