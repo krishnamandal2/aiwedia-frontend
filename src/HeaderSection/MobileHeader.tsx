@@ -223,11 +223,11 @@ export default function MobileHeader({
                 <span className="truncate">contact@aiwedia.com</span>
               </a>
               <a
-                href="tel:+919783152203"
+                href="tel:+919818521688"
                 className="flex items-center gap-3 text-slate-600 hover:text-indigo-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-lg p-2 -ml-1"
               >
                 <Phone size={18} className="flex-shrink-0" />
-                <span>+91 9783152203</span>
+                <span>+91 9818521688</span>
               </a>
             </div>
 

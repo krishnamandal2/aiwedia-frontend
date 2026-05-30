@@ -50,7 +50,7 @@ export default function DesktopHeader({ megaMenu }: { megaMenu: React.ReactNode 
             aria-label="Call us"
           >
             <Phone size={13} className="text-indigo-500" />
-            <span>+91-9783152203</span>
+            <span>+91-9818521688</span>
           </a>
         </div>
 
