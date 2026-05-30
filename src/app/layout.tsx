@@ -7,7 +7,7 @@ import Providers from "@/components/toastui/Providers"
 // import Chatbot from "@/Aichartbot/Chatbot";
 import ScrollToTopButton from "@/components/topbutton/ScrollToTopButton";
 import Chatllm from "@/LLMChatboat/Chatllm";
-import OfflineBanner from "@/offline/OfflineBanner";
+
 import ConsentGatedAnalytics from "@/components/consent/ConsentGatedAnalytics";
 import CookieConsentBanner from "@/components/consent/CookieConsentBanner";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -111,8 +111,7 @@ export default function RootLayout({
         <ConsentGatedAnalytics />
         <CookieConsentBanner />
 
-      {/* ✅ GLOBAL OFFLINE BANNER */}
-        <OfflineBanner />
+    
 
      <script
   type="application/ld+json"
