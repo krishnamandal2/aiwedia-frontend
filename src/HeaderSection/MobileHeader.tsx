@@ -15,6 +15,9 @@ import type { MenuCategory } from "@/lib/megaMenuUtils";
 // Static data moved outside component to prevent recreation
 const MOBILE_NAV_LINKS = [
   { href: "/ai-directory", label: "AI Directory Hub" },
+  { href: "/prompts", label: "Prompt Library" },
+  { href: "/ai-news", label: "AI News" },
+  { href: "/newsletter", label: "Newsletter" },
   { href: "/web-directory", label: "Web & Utility Hub" },
   { href: "/category/online-games", label: "Online Games" },
   { href: "/category/ai-code-generators", label: "Vibe Coding" },

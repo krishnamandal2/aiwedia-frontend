@@ -62,6 +62,27 @@ const HUB_SECTIONS = [
     accent: "from-blue-600 to-cyan-600",
   },
   {
+    href: "/prompts",
+    title: "AI Prompt Library",
+    desc: "Copy-ready prompts for SEO, coding, marketing & more.",
+    icon: Bot,
+    accent: "from-pink-600 to-rose-600",
+  },
+  {
+    href: "/ai-news",
+    title: "AI News",
+    desc: "Latest tool launches and AI industry trends.",
+    icon: Search,
+    accent: "from-cyan-600 to-blue-600",
+  },
+  {
+    href: "/newsletter",
+    title: "Newsletter",
+    desc: "Weekly AI tools digest in your inbox.",
+    icon: Bot,
+    accent: "from-indigo-600 to-violet-600",
+  },
+  {
     href: "/tools",
     title: "Free Download Tools",
     desc: "Video, social, PDF utilities — high search volume.",

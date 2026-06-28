@@ -94,6 +94,37 @@ export const clientApi = {
       remove: (id: string) =>
         adminFetch(`/comparisons/${id}`, { method: "DELETE" }),
     },
+    prompts: {
+      list: () => adminFetch<{ prompts: unknown[] }>("/prompts"),
+      create: (body: unknown) =>
+        adminFetch("/prompts", { method: "POST", body: JSON.stringify(body) }),
+      remove: (id: string) =>
+        adminFetch(`/prompts/${id}`, { method: "DELETE" }),
+    },
+    comments: {
+      list: (status?: string) =>
+        adminFetch<{ comments: unknown[] }>(
+          `/comments${status ? `?status=${status}` : ""}`
+        ),
+      updateStatus: (id: string, status: string) =>
+        adminFetch(`/comments/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ status }),
+        }),
+      remove: (id: string) =>
+        adminFetch(`/comments/${id}`, { method: "DELETE" }),
+    },
+    newsletter: {
+      stats: () =>
+        adminFetch<{ total: number; active: number; recent: unknown[] }>(
+          "/newsletter"
+        ),
+      sendWeekly: () =>
+        adminFetch<{ success: boolean; sent: number; total: number }>(
+          "/newsletter/send",
+          { method: "POST" }
+        ),
+    },
     categories: {
       list: () => adminFetch<{ categories: unknown[] }>("/categories"),
       update: (id: string, body: unknown) =>

@@ -5,6 +5,10 @@
 
 export type FreeToolLink = { name: string; desc: string; url: string };
 
+export type HowToStep = { step: number; title: string; text: string };
+
+export type ToolScreenshot = { title: string; image: string; caption: string };
+
 export type FreeToolPageDetail = {
   slug: string;
   title: string;
@@ -13,6 +17,10 @@ export type FreeToolPageDetail = {
   description: string;
   about?: string;
   faq?: { question: string; answer: string }[];
+  howTo?: HowToStep[];
+  benefits?: string[];
+  screenshots?: ToolScreenshot[];
+  metaKeywords?: string[];
   tools: FreeToolLink[];
 };
 
@@ -40,6 +48,56 @@ const pdfMergeTools: FreeToolLink[] = [
   { name: "Smallpdf", desc: "Combine PDFs", url: "https://smallpdf.com/merge-pdf" },
   { name: "PDF24", desc: "Free merge tool", url: "https://tools.pdf24.org/en/merge-pdf" },
 ];
+
+const ytThumbnailTools: FreeToolLink[] = [
+  { name: "BoingBoing getthumbs", desc: "YouTube thumbnail viewer & downloader — HD sizes", url: "https://boingboing.net/features/getthumbs" },
+  { name: "Thumbnail.Download", desc: "Thumbnail grabber — maxresdefault & hqdefault", url: "https://thumbnail.download" },
+  { name: "Get YouTube Thumbnail", desc: "Download YouTube thumbnail from URL", url: "https://get-youtube-thumbnail.com" },
+  { name: "YouTube Thumbnail Extractor", desc: "Extract all CDN thumbnail sizes", url: "https://seostudio.tools/youtube-thumbnail-downloader" },
+];
+
+const ytThumbnailPage: FreeToolPageDetail = {
+  slug: "youtube-thumbnail-downloader-free",
+  title: "YouTube Thumbnail Downloader — Download YouTube Thumbnails Free (HD)",
+  h1: "YouTube Thumbnail Downloader",
+  intro: "Download YouTube thumbnails in HD with thumbnail downloader, grabber, and viewer tools — paste any video URL.",
+  description: "Free YouTube thumbnail downloader & grabber — maxresdefault HD download",
+  metaKeywords: [
+    "youtube thumbnail downloader",
+    "download youtube thumbnail",
+    "thumbnail grabber",
+    "youtube thumbnail viewer",
+    "youtube thumbnail download",
+    "thumbnail download",
+  ],
+  about:
+    "A YouTube thumbnail downloader saves the cover image from any public video. Use grabbers to preview maxresdefault and hqdefault sizes before download.",
+  benefits: [
+    "Download maxresdefault (1280×720) when available",
+    "Preview all CDN sizes in one click",
+    "No account on BoingBoing getthumbs",
+    "Works on mobile and desktop",
+  ],
+  howTo: [
+    { step: 1, title: "Copy the YouTube URL", text: "Open the video and copy the link from Share or the address bar." },
+    { step: 2, title: "Paste into a grabber", text: "Use BoingBoing getthumbs or Thumbnail.Download from the list below." },
+    { step: 3, title: "Pick maxresdefault", text: "Choose the highest resolution available for that video." },
+    { step: 4, title: "Download", text: "Save the JPG to your device for analysis or design reference." },
+  ],
+  screenshots: [
+    {
+      title: "BoingBoing getthumbs viewer",
+      image: "https://res.cloudinary.com/dj3vrogpl/image/upload/v1768645475/aitools_wn5tnv.jpg",
+      caption: "Paste a URL to preview and download every thumbnail size.",
+    },
+  ],
+  faq: [
+    { question: "How do I download a YouTube thumbnail?", answer: "Copy the video URL, paste into a thumbnail downloader, select maxresdefault, and download." },
+    { question: "What is a thumbnail grabber?", answer: "A tool that fetches all YouTube CDN thumbnail sizes from one video link." },
+    { question: "Is BoingBoing getthumbs free?", answer: "Yes — free at boingboing.net/features/getthumbs with no login." },
+  ],
+  tools: ytThumbnailTools,
+};
 
 export const FREE_TOOL_PAGE_FALLBACK: Record<string, FreeToolPageDetail> = {
   "youtube-video-downloader-free": {
@@ -127,17 +185,8 @@ export const FREE_TOOL_PAGE_FALLBACK: Record<string, FreeToolPageDetail> = {
       { name: "Photoroom", desc: "Free tier available", url: "https://www.photoroom.com" },
     ],
   },
-  "youtube-thumbnail-downloader": {
-    slug: "youtube-thumbnail-downloader",
-    title: "Free YouTube Thumbnail Downloader",
-    h1: "YouTube Thumbnail Downloader",
-    intro: "Download YouTube video thumbnails in high resolution.",
-    description: "Download YouTube thumbnails in HD",
-    tools: [
-      { name: "ThumbnailSave", desc: "HD thumbnails", url: "https://www.thumbnailsave.com" },
-      { name: "GetThumbnail", desc: "YouTube thumbnail tool", url: "https://www.getthumbnail.com" },
-    ],
-  },
+  "youtube-thumbnail-downloader-free": ytThumbnailPage,
+  "youtube-thumbnail-downloader": ytThumbnailPage,
 };
 
 export function getFreeToolPageFallback(slug: string): FreeToolPageDetail | null {

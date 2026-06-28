@@ -25,6 +25,10 @@ export default async function Footer() {
         ];
 
   const quickLinks = [
+    { name: "AI Directory", href: "/ai-directory" },
+    { name: "Prompt Library", href: "/prompts" },
+    { name: "AI News Live", href: "/ai-news" },
+    { name: "Newsletter", href: "/newsletter" },
     { name: "Blog", href: "/blog" },
     { name: "Best Guides", href: "/best" },
     { name: "Compare Tools", href: "/compare" },

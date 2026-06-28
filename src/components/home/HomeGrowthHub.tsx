@@ -4,12 +4,43 @@ import {
   BookOpen,
   GitCompare,
   Layers,
-  LineChart,
+  Mail,
+  Newspaper,
   PenLine,
+  Sparkles,
   Trophy,
+  Bot,
 } from "lucide-react";
 
 const FEATURES = [
+  {
+    href: "/ai-directory",
+    title: "AI Tool Directory",
+    desc: "1,200+ AI tools across coding, SEO, agents, image AI, and more.",
+    icon: Bot,
+    accent: "from-violet-600 to-indigo-600",
+  },
+  {
+    href: "/prompts",
+    title: "AI Prompt Library",
+    desc: "Copy-ready prompts for ChatGPT, Claude, Midjourney, and SEO.",
+    icon: Sparkles,
+    accent: "from-fuchsia-600 to-pink-600",
+  },
+  {
+    href: "/newsletter",
+    title: "Newsletter",
+    desc: "Weekly digest — tools, news, prompts, and guides in your inbox.",
+    icon: Mail,
+    accent: "from-indigo-600 to-blue-600",
+  },
+  {
+    href: "/ai-news",
+    title: "AI News Live",
+    desc: "RSS feed — AI, tech, startups & research updated every 3 hours.",
+    icon: Newspaper,
+    accent: "from-red-600 to-violet-600",
+  },
   {
     href: "/best",
     title: "Best-of guides",
@@ -32,16 +63,9 @@ const FEATURES = [
     accent: "from-fuchsia-600 to-pink-600",
   },
   {
-    href: "/top-trending-websites",
-    title: "Trending websites",
-    desc: "High-volume “what’s trending” searches — updated by year.",
-    icon: LineChart,
-    accent: "from-emerald-600 to-teal-600",
-  },
-  {
     href: "/blog",
     title: "Guides & blog",
-    desc: "Long-form SEO content with internal links to your categories.",
+    desc: "Long-form SEO content with comments and internal links.",
     icon: BookOpen,
     accent: "from-slate-700 to-violet-800",
   },

@@ -134,6 +134,32 @@ async function fetchCollectionSlugs(): Promise<string[]> {
   }
 }
 
+async function fetchPromptSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/prompts`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.prompts || []).map((p: { slug: string }) => p.slug);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchAiNewsSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/ai-news?page=1&limit=500`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.items || []).map((i: { slug: string }) => i.slug);
+  } catch {
+    return [];
+  }
+}
+
 async function fetchAiToolDetailUrls() {
   const urls: MetadataRoute.Sitemap = [];
   const slugs = Array.from(HIGH_PRIORITY_SLUGS);
@@ -182,6 +208,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
   const collectionSlugs = await fetchCollectionSlugs();
   const comparisonSlugs = await fetchComparisonSlugs();
+  const promptSlugs = await fetchPromptSlugs();
+  const aiNewsSlugs = await fetchAiNewsSlugs();
   const toolDetailUrls = await fetchAiToolDetailUrls();
 
   /* =========================
@@ -258,6 +286,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date("2026-05-22"),
       changeFrequency: "weekly",
       priority: 0.88,
+    },
+
+    {
+      url: `${BASE_URL}/prompts`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+
+    {
+      url: `${BASE_URL}/ai-news`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "daily",
+      priority: 0.88,
+    },
+
+    {
+      url: `${BASE_URL}/newsletter`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
 
     {
@@ -366,6 +415,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
+  const promptUrls = promptSlugs.map((slug) => ({
+    url: `${BASE_URL}/prompts/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  const aiNewsUrls = aiNewsSlugs.map((slug) => ({
+    url: `${BASE_URL}/ai-news/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "daily" as const,
+    priority: 0.75,
+  }));
+
   /* =========================
      FINAL RETURN
   ========================= */
@@ -378,6 +441,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...bestGuideUrls,
     ...collectionUrls,
     ...comparisonUrls,
+    ...promptUrls,
+    ...aiNewsUrls,
     ...toolDetailUrls,
   ];
 }

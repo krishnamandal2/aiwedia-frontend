@@ -5,6 +5,15 @@ const apiBackend =
   "http://localhost:7300";
 
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/tools/youtube-thumbnail-downloader",
+        destination: "/tools/youtube-thumbnail-downloader-free",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const base = apiBackend.replace(/\/$/, "");
     return [

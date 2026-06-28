@@ -62,16 +62,19 @@ function normalizePublicBlogsResponse(
 
 export async function getPublicBlogs(
   page = 1,
-  limit = 12
+  limit = 12,
+  type?: "guide" | "news" | "review"
 ): Promise<{ blogs: BlogListItem[]; pagination: BlogPagination }> {
   if (!BASE) {
     console.error("getPublicBlogs: NEXT_PUBLIC_API_URL is not set");
     return { blogs: [], pagination: emptyPagination(limit) };
   }
 
+  const typeQ = type ? `&type=${type}` : "";
+
   try {
     const res = await fetch(
-      `${BASE}/api/blogs/public?page=${page}&limit=${limit}`,
+      `${BASE}/api/blogs/public?page=${page}&limit=${limit}${typeQ}`,
       { cache: "no-store" }
     );
 

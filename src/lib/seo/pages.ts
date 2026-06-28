@@ -53,13 +53,15 @@ export const BLOG_INDEX_SEO: PageSeoInput = {
 };
 
 export const TRENDING_SEO: PageSeoInput = {
-  title: "Top Trending Websites on Google by Year (2010–2026)",
+  title: "Top Trending & Traffic Websites 2026 — Most Visited Sites",
   description:
-    "See what the world searched on Google each year — YouTube, Facebook, ChatGPT, and more. Historical trending website rankings on AIWedia.",
+    "Most visited websites in 2026 — Google, YouTube, ChatGPT, TikTok, FIFA World Cup. Year-by-year trending rankings from 2010 to 2026 on AIWedia.",
   path: "/top-trending-websites",
   keywords: [
-    "top trending websites",
+    "top trending websites 2026",
+    "top traffic websites 2026",
     "most searched websites",
+    "most visited websites",
     "google trends websites",
     "popular websites by year",
   ],

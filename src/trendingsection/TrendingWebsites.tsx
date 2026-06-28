@@ -1,257 +1,262 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  trendingData,
-  Website,
-  TRENDING_YEARS,
-} from "@/data/trendingsitedata/Trendingdata";
-import {
-  Search,
-  TrendingUp,
-  Globe,
-  ExternalLink,
-  BarChart3,
-  ChevronRight,
-} from "lucide-react";
-
-function getDomain(url: string) {
-  try {
-    return new URL(url).hostname.replace("www.", "");
-  } catch {
-    return url;
-  }
-}
-
-function mockSearchInterest(rank: number): string {
-  return `${Math.max(12, 92 - rank * 8)}`;
-}
-
-type TrendingYear = (typeof TRENDING_YEARS)[number];
+import { useState, useEffect } from "react";
+import { trendingData, Website } from "@/data/trendingsitedata/Trendingdata";
 
 export default function TrendingWebsites() {
-  const [year, setYear] = useState<TrendingYear>(
-    TRENDING_YEARS.find((y) => y !== "2026") ?? "2025"
-  );
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<"leaderboard" | "cards">("leaderboard");
+  const [year, setYear] = useState("2026");
+  const currentData = trendingData[year];
 
-  const rawData = trendingData[year];
-  const isComingSoon = rawData === "coming-soon";
-
-  const sites = useMemo(() => {
-    if (isComingSoon || !Array.isArray(rawData)) return [];
-    if (!query.trim()) return rawData;
-    const q = query.toLowerCase();
-    return rawData.filter(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q)
-    );
-  }, [rawData, query, isComingSoon]);
+  // Optional: add a mounting animation class
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#06060c] text-slate-100">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-0 h-[480px] w-[480px] rounded-full bg-blue-600/15 blur-[120px]" />
-        <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-violet-600/15 blur-[100px]" />
+    <section className="w-full py-16 md:py-24 bg-gradient-to-b from-white via-blue-50/20 to-white overflow-hidden relative">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 -z-10 opacity-30">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-        {/* Header */}
-        <header className="mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-blue-300">
-            <BarChart3 size={12} />
-            Google Search Trends Archive
-          </div>
-          <h1 className="mt-5 text-3xl font-black tracking-tight sm:text-5xl md:text-6xl">
-            Most searched{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-violet-400 bg-clip-text text-transparent">
-              websites
-            </span>
-          </h1>
-          <p className="mt-4 max-w-3xl text-base text-slate-400 sm:text-lg">
-            Year-by-year snapshot of the sites people searched for most on
-            Google — like a simplified trends dashboard. Pick a year to explore
-            the leaderboard.
-          </p>
-        </header>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section - Enhanced */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 md:mb-16 gap-8">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 text-blue-700 text-sm font-medium">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+              Trending Now
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+              <span className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-600 bg-clip-text text-transparent">
+                Trending
+              </span>
+              <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent ml-3">
+                Websites
+              </span>
+            </h2>
+            {/* HIGHLIGHTED PARAGRAPH - Enhanced with gradient background, icon, and improved visibility */}
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-blue-300/10 to-transparent blur-md rounded-xl"></div>
 
-        {/* Controls */}
-        <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-1.5">
-            {TRENDING_YEARS.map((y) => (
-              <button
-                key={y}
-                type="button"
-                onClick={() => setYear(y)}
-                className={`rounded-xl px-4 py-2 text-sm font-bold transition ${
-                  year === y
-                    ? "bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg"
-                    : "border border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-                }`}
-              >
-                {y}
-                {y === "2026" && (
-                  <span className="ml-1 text-[10px] opacity-70">soon</span>
-                )}
-              </button>
-            ))}
+              <div className="relative bg-gradient-to-r from-blue-50/80 to-transparent backdrop-blur-sm px-5 py-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
+
+                <p className="text-blue-800 text-base md:text-lg font-semibold flex items-center gap-2">
+                  <span className="text-xl">✨</span>
+                  Discover the digital leaders and innovators of
+                </p>
+
+                {/* BIG YEAR */}
+                <h3 className="text-3xl md:text-4xl font-extrabold mt-1 bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+                  {year}
+                </h3>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative min-w-[200px] flex-1 lg:max-w-xs">
-              <Search
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-              />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Filter sites…"
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:outline-none"
-              />
+          {/* IMPROVED YEAR SECTION - Added explicit "Choose year" label and better structure */}
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex items-center gap-2 text-blue-600 text-sm font-semibold tracking-wide">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Choose year</span>
             </div>
-            <div className="flex rounded-xl border border-white/10 p-0.5">
-              <button
-                type="button"
-                onClick={() => setView("leaderboard")}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold ${
-                  view === "leaderboard"
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400"
-                }`}
-              >
-                Leaderboard
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("cards")}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold ${
-                  view === "cards" ? "bg-blue-600 text-white" : "text-slate-400"
-                }`}
-              >
-                Cards
-              </button>
+            <div className="relative bg-white/70 backdrop-blur-sm p-1.5 rounded-2xl border border-blue-100 shadow-lg shadow-blue-100/30">
+              <div className="flex flex-wrap justify-center gap-1">
+                {Object.keys(trendingData).map((y) => (
+                  <button
+                    key={y}
+                    onClick={() => setYear(y)}
+                    aria-pressed={year === y}
+                    aria-label={`Select year ${y}`}
+                    className={`relative px-5 md:px-6 py-2.5 rounded-xl text-sm md:text-base font-bold transition-all duration-300 overflow-hidden group focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${year === y
+                      ? "text-white"
+                      : "text-blue-700 hover:text-blue-900 hover:bg-blue-50"
+                      }`}
+                  >
+                    {year === y && (
+                      <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl shadow-md shadow-blue-200 animate-fade-in" />
+                    )}
+                    <span className="relative z-10">{y}</span>
+                  </button>
+                ))}
+              </div>
             </div>
+            <p className="text-xs text-blue-400 mt-1 hidden sm:block">Last updated: monthly trends</p>
           </div>
         </div>
 
-        {isComingSoon ? (
-          <div className="rounded-3xl border border-dashed border-blue-500/30 bg-blue-500/5 px-8 py-20 text-center">
-            <TrendingUp className="mx-auto text-blue-400" size={48} />
-            <h2 className="mt-4 text-2xl font-bold text-white">
-              {year} data coming soon
-            </h2>
-            <p className="mx-auto mt-2 max-w-md text-slate-400">
-              We&apos;re compiling search trend signals for {year}. Select an
-              earlier year to browse historical rankings.
-            </p>
-          </div>
-        ) : view === "leaderboard" ? (
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 border-b border-white/10 bg-white/[0.04] px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:px-6">
-              <span>Rank</span>
-              <span>Website</span>
-              <span className="hidden sm:block">Interest</span>
-              <span className="text-right">Action</span>
+        {/* Content Area */}
+        {currentData === "coming-soon" ? (
+          <div className="flex flex-col justify-center items-center text-center py-20 md:py-28 px-6 border-2 border-dashed border-blue-200 rounded-3xl bg-blue-50/20 backdrop-blur-sm">
+            <div className="relative">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 animate-bounce shadow-lg">
+                <span className="text-4xl">🚀</span>
+              </div>
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-ping"></div>
             </div>
-            <ul>
-              {sites.map((site: Website, index: number) => (
-                <li
-                  key={`${site.name}-${index}`}
-                  className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-4 border-b border-white/5 px-4 py-4 transition hover:bg-white/[0.04] sm:px-6"
-                >
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black ${
-                      index === 0
-                        ? "bg-amber-500/20 text-amber-300"
-                        : index < 3
-                          ? "bg-blue-500/20 text-blue-300"
-                          : "bg-white/5 text-slate-400"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-white">{site.name}</p>
-                    <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">
-                      {getDomain(site.url)} · {site.description}
-                    </p>
-                  </div>
-                  <div className="hidden items-center gap-2 sm:flex">
-                    <div className="h-2 w-24 overflow-hidden rounded-full bg-white/10">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400"
-                        style={{
-                          width: `${100 - index * 9}%`,
-                        }}
-                      />
+            <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">
+              2026 Collection
+            </h3>
+            <p className="text-blue-500 mt-3 max-w-md">
+              We&apos;re currently analyzing emerging trends and collecting data...
+            </p>
+            <div className="flex gap-2 mt-6">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-150"></div>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-300"></div>
+            </div>
+          </div>
+        ) : (
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 transition-all duration-700 ${isMounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+              }`}
+          >
+            {currentData.map((site: Website, index: number) => (
+              <div
+                key={index}
+                className="group relative flex flex-col h-full rounded-2xl border border-blue-100 bg-white/80 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:shadow-blue-200/50 hover:-translate-y-1 hover:border-blue-200 overflow-hidden"
+              >
+                {/* Animated gradient border on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:via-blue-400/10 group-hover:to-blue-500/10 transition-all duration-700 pointer-events-none"></div>
+
+                <div className="p-6 md:p-8 flex flex-col h-full relative z-10">
+                  {/* Rank Badge - Enhanced */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="relative">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 font-bold text-xl shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        {index + 1}
+                      </div>
+                      {/* Trending arrow for top 3 */}
+                      {index < 3 && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shadow-md">
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={3}
+                              d="M5 15l7-7 7 7"
+                            />
+                          </svg>
+                        </div>
+                      )}
                     </div>
-                    <span className="text-xs font-semibold text-cyan-400/90">
-                      {mockSearchInterest(index)}
-                    </span>
+                    <div className="h-px flex-grow mx-3 bg-gradient-to-r from-blue-100 via-blue-200 to-transparent"></div>
+                    {index === 0 && (
+                      <span className="text-xs font-bold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">
+                        #1 Top Pick
+                      </span>
+                    )}
                   </div>
+
+                  {/* Website Name */}
+                  <h3 className="text-2xl md:text-3xl font-bold text-blue-950 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                    {site.name}
+                  </h3>
+
+                  {/* Description with line clamp for consistency */}
+                  <p className="text-slate-500 leading-relaxed mb-6 flex-grow line-clamp-3">
+                    {site.description}
+                  </p>
+
+                  {/* Visit Button - Premium */}
                   <a
                     href={site.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:bg-blue-600 hover:text-white"
+                    className="inline-flex items-center justify-between w-full px-5 py-3.5 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 group-hover:from-blue-600 group-hover:to-blue-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-blue-200"
                   >
-                    Visit
-                    <ExternalLink size={12} />
+                    <span>Visit Website</span>
+                    <svg
+                      className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
                   </a>
-                </li>
-              ))}
-            </ul>
-            {sites.length === 0 && (
-              <p className="py-12 text-center text-slate-500">No matches</p>
-            )}
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sites.map((site: Website, index: number) => (
-              <article
-                key={`${site.name}-${index}`}
-                className="group rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition hover:border-blue-500/40 hover:bg-white/[0.06]"
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <span className="rounded-lg bg-blue-600/20 px-2.5 py-1 text-sm font-black text-blue-300">
-                    #{index + 1}
-                  </span>
-                  <Globe size={18} className="text-slate-600" />
                 </div>
-                <h3 className="text-xl font-bold text-white group-hover:text-blue-300">
-                  {site.name}
-                </h3>
-                <p className="mt-2 line-clamp-2 text-sm text-slate-400">
-                  {site.description}
-                </p>
-                <p className="mt-3 text-xs text-slate-500">
-                  {getDomain(site.url)}
-                </p>
-                <a
-                  href={site.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 py-2.5 text-sm font-bold text-white transition hover:opacity-90"
-                >
-                  Open site
-                  <ChevronRight size={16} />
-                </a>
-              </article>
+
+                {/* Decorative background element - animated */}
+                <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-gradient-to-tr from-blue-100 to-blue-50 rounded-full opacity-0 group-hover:opacity-60 group-hover:scale-150 transition-all duration-700 -z-0 pointer-events-none"></div>
+              </div>
             ))}
           </div>
         )}
 
-        {!isComingSoon && (
-          <p className="mt-8 text-center text-xs text-slate-500">
-            Rankings are editorial snapshots inspired by global search interest
-            patterns · Not official Google data
-          </p>
+        {/* Additional footer note for better UX */}
+        {currentData !== "coming-soon" && (
+          <div className="text-center mt-12 text-sm text-blue-400 border-t border-blue-100 pt-6">
+            <span className="inline-flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Rankings updated monthly based on traffic & engagement
+            </span>
+          </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-in-out;
+        }
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        .animate-bounce {
+          animation: bounce 1s infinite;
+        }
+        .delay-150 {
+          animation-delay: 150ms;
+        }
+        .delay-300 {
+          animation-delay: 300ms;
+        }
+        .delay-1000 {
+          animation-delay: 1000ms;
+        }
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </section>
   );
 }

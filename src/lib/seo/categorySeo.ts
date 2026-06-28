@@ -174,6 +174,121 @@ const SEO_PRESETS: Record<
       "AI tax software",
     ],
   },
+  "ai-agent-workflow-automation": {
+    title: "Best AI Agent Workflow Automation Tools 2026",
+    description:
+      "Zapier, Make, n8n, Power Automate — build multi-step AI agent workflows. Compare free tiers on AIWedia.",
+    keywords: [
+      "ai agent workflow automation",
+      "ai workflow automation",
+      "workflow ai agent",
+      "ai agents for workflows",
+    ],
+  },
+  "ai-agent-automation-platform": {
+    title: "Best AI Agent Automation Platforms 2026",
+    description:
+      "Enterprise and startup platforms to build, deploy, and monitor AI agents — Copilot Studio, Relevance AI, CrewAI.",
+    keywords: [
+      "ai agent automation platform",
+      "ai agent software",
+      "agent automation platform",
+      "best ai agent tools",
+    ],
+  },
+  "ai-email-marketing-tools": {
+    title: "Best AI Email Marketing Tools 2026 — Free & Paid",
+    description:
+      "AI tools for email marketing — subject lines, automation, personalization. Mailchimp, Brevo, HubSpot, Klaviyo ranked.",
+    keywords: [
+      "ai tools for email marketing",
+      "ai email marketing software",
+      "free ai email marketing tool",
+      "best ai email marketing tools",
+    ],
+  },
+  "lemlist-ai-outreach": {
+    title: "Lemlist & Best AI Cold Email Outreach Tools 2026",
+    description:
+      "Lemlist, Instantly, Smartlead, Apollo — AI cold email and multichannel outreach compared on AIWedia.",
+    keywords: ["lemlist", "lemlist ai", "cold email ai", "lemlist alternatives"],
+  },
+  "bing-most-visited-websites": {
+    title: "Bing & Microsoft Most Visited Websites 2026",
+    description:
+      "Bing, Copilot, MSN, Outlook, LinkedIn — Microsoft's highest-traffic sites ranked for 2026.",
+    keywords: [
+      "bing most visited websites",
+      "microsoft most visited sites",
+      "bing traffic 2026",
+    ],
+  },
+  "ai-tools-india-2026": {
+    title: "Best AI Tools in India 2026 — Free & Local",
+    description:
+      "ChatGPT, Gemini, Krutrim, Sarvam, Bhashini — top AI tools Indian users search on Google.",
+    keywords: ["ai tools india", "best ai tools india 2026", "free ai india"],
+  },
+  "ai-tools-usa-2026": {
+    title: "Best AI Tools in USA 2026",
+    description:
+      "Copilot, ChatGPT, Agentforce, Jasper — top AI software for US businesses and creators.",
+    keywords: ["ai tools usa", "best ai tools america 2026", "ai software usa"],
+  },
+  "ipl-cricket-live-2026": {
+    title: "IPL 2026 Live Score — Cricbuzz, ESPN, Official",
+    description:
+      "IPL live score, ball-by-ball updates, points table, and official cricket sources for 2026.",
+    keywords: ["ipl live score", "ipl 2026", "cricket live score"],
+  },
+  "freight-booking": {
+    title: "Best Logistics & Freight Booking Websites 2026",
+    description:
+      "Online freight booking, shipping quotes, and logistics platforms — Freightos, Flexport, and more.",
+    keywords: [
+      "best logistics website",
+      "freight booking platform",
+      "online freight forwarding",
+    ],
+  },
+  "ai-image-filters": {
+    title: "Best AI Image Filters & Photo Effects 2026",
+    description:
+      "AI photo filters, style transfer, and image effects for social media and design.",
+    keywords: ["ai image filters", "ai photo effects", "image filter ai"],
+  },
+  "pdf-and-document-tools": {
+    title: "Best AI PDF & Document Tools 2026",
+    description:
+      "Chat with PDFs, summarize documents, merge and convert — AI document assistants ranked.",
+    keywords: ["ai pdf tools", "chat with pdf", "ai document assistant"],
+  },
+  "ai-workflow-automation-tools": {
+    title: "AI Workflow Automation — Zapier-Style Tools 2026",
+    description:
+      "Connect apps and automate tasks with AI — no-code workflow builders compared.",
+    keywords: ["ai workflow automation", "zapier alternative ai", "automation ai"],
+  },
+  "trending-websites": {
+    title: "Top Trending & Most Visited Websites 2026",
+    description:
+      "Google, YouTube, ChatGPT, TikTok, FIFA — what the world searches and visits most in 2026.",
+    keywords: [
+      "top trending websites 2026",
+      "most visited websites",
+      "popular websites 2026",
+    ],
+  },
+  "indian-government-websites": {
+    title: "Indian Government Websites List 2026 — Official Portals",
+    description:
+      "Official Indian government websites for services, schemes, tax, and departments — curated list.",
+    keywords: [
+      "indian government website list",
+      "gov websites india",
+      "government of india website",
+    ],
+  },
 };
 
 export function buildCategoryMetadata(

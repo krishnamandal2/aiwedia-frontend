@@ -29,11 +29,19 @@ export async function generateMetadata({ params }: Props) {
     data.intro?.slice(0, 160) ||
     `Free ${title} tools and links curated on AIWedia.`;
 
+  const keywords = [
+    ...(data.metaKeywords ?? []),
+    title,
+    "free online tool",
+    "aiwedia",
+    slug.replace(/-/g, " "),
+  ];
+
   return buildPageMetadata({
-    title: `${title} — Free Online Tools`,
+    title: `${title} — Free Online Tools | AIWedia`,
     description,
     path: `/tools/${slug}`,
-    keywords: [title, "free online tool", "aiwedia", slug.replace(/-/g, " ")],
+    keywords,
   });
 }
 
@@ -56,6 +64,8 @@ export default async function Page({ params }: Props) {
         title={pageTitle}
         description={pageDesc}
         tools={data.tools}
+        faq={data.faq}
+        howTo={data.howTo}
       />
       <FreeLinkSection
         title={data.h1}
@@ -63,6 +73,9 @@ export default async function Page({ params }: Props) {
         tools={data.tools}
         about={data.about}
         faq={data.faq}
+        howTo={data.howTo}
+        benefits={data.benefits}
+        screenshots={data.screenshots}
       />
     </>
   );

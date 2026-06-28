@@ -4,28 +4,29 @@ export type Website = {
   description: string;
 };
 
-export const TRENDING_YEARS = [
-  "2026",
-  "2025",
-  "2024",
-  "2023",
-  "2022",
-  "2021",
-  "2020",
-  "2019",
-  "2018",
-  "2017",
-  "2016",
-  "2015",
-  "2014",
-  "2013",
-  "2012",
-  "2011",
-  "2010",
-] as const;
-
 export const trendingData: Record<string, Website[] | "coming-soon"> = {
-  "2026": "coming-soon",
+  "2026": [
+    { name: "Google", url: "https://www.google.com", description: "#1 most visited website — search, Maps, Gmail, and Gemini AI." },
+    { name: "YouTube", url: "https://www.youtube.com", description: "Largest video platform — entertainment, education, and Shorts." },
+    { name: "ChatGPT", url: "https://chat.openai.com", description: "Leading AI chatbot reshaping search and productivity in 2026." },
+    { name: "Facebook", url: "https://www.facebook.com", description: "Global social network with billions of monthly users." },
+    { name: "Instagram", url: "https://www.instagram.com", description: "Reels, Stories, and creator commerce drive daily traffic." },
+    { name: "WhatsApp Web", url: "https://web.whatsapp.com", description: "World's top messaging app — web access for desktop users." },
+    { name: "TikTok", url: "https://www.tiktok.com", description: "Short-video leader with among the highest engagement time." },
+    { name: "X (Twitter)", url: "https://x.com", description: "Real-time news, trends, and live event commentary." },
+    { name: "Wikipedia", url: "https://www.wikipedia.org", description: "Free encyclopedia — billions of visits from Google search." },
+    { name: "Amazon", url: "https://www.amazon.com", description: "E-commerce and cloud giant — top shopping traffic." },
+    { name: "Google Gemini", url: "https://gemini.google.com", description: "Google's multimodal AI — integrated with Search and Android." },
+    { name: "Reddit", url: "https://www.reddit.com", description: "Community forums — front page of the internet." },
+    { name: "LinkedIn", url: "https://www.linkedin.com", description: "Professional networking and job search leader." },
+    { name: "Netflix", url: "https://www.netflix.com", description: "Streaming subscription with global original content." },
+    { name: "FIFA World Cup 2026", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", description: "Official tournament hub — live scores and fixtures trending worldwide." },
+    { name: "Claude", url: "https://claude.ai", description: "Anthropic AI assistant trending for coding and long documents." },
+    { name: "Perplexity", url: "https://www.perplexity.ai", description: "AI answer engine with sources — growing search alternative." },
+    { name: "Spotify", url: "https://open.spotify.com", description: "Music and podcast streaming with massive daily active users." },
+    { name: "Canva", url: "https://www.canva.com", description: "Design platform with AI tools for social and business." },
+    { name: "Bing", url: "https://www.bing.com", description: "Microsoft search with Copilot AI built in." },
+  ],
 
   "2025": [
     { name: "ChatGPT", url: "https://chat.openai.com", description: "AI chatbot revolutionizing workflows." },

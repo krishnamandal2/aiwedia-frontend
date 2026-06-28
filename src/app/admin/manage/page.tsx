@@ -7,6 +7,10 @@ import { useRouter } from "next/navigation";
 const SECTIONS = [
   { href: "/admin/dashboard", title: "Blogs", desc: "Create & edit blog posts" },
   { href: "/admin/submissions", title: "Tool submissions", desc: "Approve user suggestions" },
+  { href: "/admin/prompts", title: "Prompt library", desc: "AI prompts for /prompts" },
+  { href: "/admin/comments", title: "Comments", desc: "Moderate blog comments" },
+  { href: "/admin/newsletter", title: "Newsletter", desc: "Subscriber stats" },
+  { href: "/admin/ai-news", title: "AI News RSS", desc: "Auto-fetch & refresh feeds" },
   { href: "/admin/guides", title: "Best guides", desc: "SEO landing guides (DB)" },
   { href: "/admin/comparisons", title: "Comparisons", desc: "Tool vs tool pages" },
   { href: "/admin/categories", title: "Categories", desc: "FAQ, descriptions, SEO intro" },

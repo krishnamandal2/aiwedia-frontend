@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import TableOfContents from "@/blogscms/TableOfContents";
 import RelatedPosts from "@/blogscms/RelatedPosts";
 import Blogsletter from "@/newsletter/Blogsletter";
+import CommentSection from "@/components/comments/CommentSection";
 
 
 
@@ -206,6 +207,7 @@ export default function BlogView({
             {/* Related Posts */}
             <footer className="mt-12 md:mt-16 lg:mt-20 pt-8 md:pt-10 border-t border-gray-100">
                <Blogsletter/>
+              <CommentSection contentSlug={blog.slug} contentType="blog" />
               <RelatedPosts posts={related} />
             </footer>
           </main>

@@ -5,7 +5,11 @@ import { ArrowLeft, ArrowUpRight, ExternalLink, Star } from "lucide-react";
 import ToolDirectoryCard, {
   type DirectoryTool,
 } from "@/components/tools/ToolDirectoryCard";
+import ToolRatingSection from "@/components/tools/ToolRatingSection";
+import ToolRelatedContent from "@/components/linking/ToolRelatedContent";
+import CommentSection from "@/components/comments/CommentSection";
 import { resolveToolDetail } from "@/lib/api";
+import { getToolRelated } from "@/lib/linkingApi";
 import { buildPageMetadata } from "@/lib/seo/buildMetadata";
 import { SITE_URL } from "@/lib/seo/site";
 import { theme } from "@/lib/siteTheme";
@@ -47,6 +51,8 @@ export default async function ToolDetailPage({ params }: PageProps) {
 
   const { tool, category, similar } = data;
   const launchUrl = tool.launchUrl || tool.url;
+  const commentSlug = `${categorySlug}/${toolSlug}`;
+  const related = await getToolRelated(categorySlug, toolSlug);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -152,7 +158,19 @@ export default async function ToolDetailPage({ params }: PageProps) {
               </ul>
             </div>
           )}
+
+          <ToolRatingSection categorySlug={categorySlug} toolSlug={toolSlug} />
         </div>
+
+        <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+          <CommentSection contentSlug={commentSlug} contentType="tool" />
+        </div>
+
+        <ToolRelatedContent
+          news={related.news || []}
+          prompts={related.prompts || []}
+          similarTools={related.similarTools || []}
+        />
 
         {similar && similar.length > 0 && (
           <section className="mt-12">

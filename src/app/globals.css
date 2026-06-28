@@ -107,6 +107,23 @@ svg {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes ai-news-ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ai-news-ticker 45s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
 article table {
   width: 100%;
   border-collapse: collapse;

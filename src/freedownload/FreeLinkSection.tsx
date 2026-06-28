@@ -9,6 +9,9 @@ import {
 } from "lucide-react";
 import AboutSection from "./AboutSection";
 import FAQSection from "./FAQSection";
+import HowToSection from "./HowToSection";
+import BenefitsSection from "./BenefitsSection";
+import ScreenshotsSection from "./ScreenshotsSection";
 
 type Tool = {
   name: string;
@@ -21,12 +24,27 @@ type FAQ = {
   answer: string;
 };
 
+type HowToStep = {
+  step: number;
+  title: string;
+  text: string;
+};
+
+type Screenshot = {
+  title: string;
+  image: string;
+  caption: string;
+};
+
 type Props = {
   title: string;
   description: string;
   tools: Tool[];
   about?: string;
   faq?: FAQ[];
+  howTo?: HowToStep[];
+  benefits?: string[];
+  screenshots?: Screenshot[];
 };
 
 export default function FreeLinkSection({
@@ -35,6 +53,9 @@ export default function FreeLinkSection({
   tools,
   about,
   faq,
+  howTo,
+  benefits,
+  screenshots,
 }: Props) {
   return (
     <div className="relative min-h-screen bg-[#06060c] text-slate-100">
@@ -76,6 +97,18 @@ export default function FreeLinkSection({
             We review and list tools — we do not host third-party content.
           </p>
         </header>
+
+        {benefits && benefits.length > 0 && (
+          <div className="mb-10 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+            <BenefitsSection benefits={benefits} />
+          </div>
+        )}
+
+        {howTo && howTo.length > 0 && (
+          <div className="mb-10 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+            <HowToSection howTo={howTo} />
+          </div>
+        )}
 
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500">
@@ -137,6 +170,12 @@ export default function FreeLinkSection({
             </article>
           ))}
         </div>
+        )}
+
+        {screenshots && screenshots.length > 0 && (
+          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+            <ScreenshotsSection screenshots={screenshots} />
+          </div>
         )}
 
         <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-6">

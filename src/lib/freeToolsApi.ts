@@ -69,6 +69,10 @@ export async function getFreeToolBySlug(
             description: data.description || data.intro || "",
             about: data.about,
             faq: data.faq,
+            howTo: data.howTo,
+            benefits: data.benefits,
+            screenshots: data.screenshots,
+            metaKeywords: data.metaKeywords,
             tools: Array.isArray(data.tools) ? data.tools : [],
           };
         }

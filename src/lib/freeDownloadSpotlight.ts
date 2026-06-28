@@ -49,7 +49,7 @@ export const FREE_DOWNLOAD_TRENDING = [
     searches: "1.2M+ / mo",
   },
   {
-    slug: "youtube-thumbnail-downloader",
+    slug: "youtube-thumbnail-downloader-free",
     label: "YT thumbnail",
     emoji: "🖼️",
     searches: "500K+ / mo",
@@ -59,6 +59,42 @@ export const FREE_DOWNLOAD_TRENDING = [
     label: "Reddit video",
     emoji: "🔴",
     searches: "400K+ / mo",
+  },
+  {
+    slug: "ai-agent-workflow-automation-free",
+    label: "AI agent workflows",
+    emoji: "🤖",
+    searches: "rising",
+  },
+  {
+    slug: "lemlist-ai-outreach-free",
+    label: "Lemlist outreach",
+    emoji: "📧",
+    searches: "high intent",
+  },
+  {
+    slug: "bing-most-visited-websites-2026",
+    label: "Bing traffic",
+    emoji: "🔍",
+    searches: "trending",
+  },
+  {
+    slug: "jpg-to-pdf-online-free",
+    label: "JPG to PDF",
+    emoji: "📄",
+    searches: "1M+ / mo",
+  },
+  {
+    slug: "us-election-2026-live-results-free",
+    label: "US Election live",
+    emoji: "🗳️",
+    searches: "seasonal",
+  },
+  {
+    slug: "best-ai-tools-india-2026-free",
+    label: "AI India",
+    emoji: "🇮🇳",
+    searches: "rising",
   },
 ] as const;
 

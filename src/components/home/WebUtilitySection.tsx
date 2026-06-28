@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Globe, Zap, TrendingUp, Download, Gamepad2, FileText } from "lucide-react";
+import { ArrowRight, Globe, Zap, Newspaper, Download, Gamepad2, FileText } from "lucide-react";
 import { WEB_SPOTLIGHT, webCategoryEmoji } from "@/lib/megaMenuUtils";
 
 type WebCategory = {
@@ -12,11 +12,11 @@ type WebCategory = {
 
 const HELPFUL_PATHS = [
   {
-    href: "/top-trending-websites",
-    title: "Trending on Google",
-    desc: "See what the world searched — by year",
-    icon: TrendingUp,
-    accent: "from-orange-500 to-amber-500",
+    href: "/ai-news",
+    title: "AI News Live",
+    desc: "AI, technology & startup news from RSS",
+    icon: Newspaper,
+    accent: "from-violet-600 to-red-600",
   },
   {
     href: "/tools",

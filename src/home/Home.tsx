@@ -14,7 +14,7 @@ import HomeQuickLinks from "@/components/home/HomeQuickLinks";
 import HomeWhatsNew from "@/components/home/HomeWhatsNew";
 import HomeDiscover from "@/components/home/HomeDiscover";
 import HomeGrowthHub from "@/components/home/HomeGrowthHub";
-import TrendingWebsites from "@/trendingsection/TrendingWebsites";
+import HomeLiveNews from "@/components/home/HomeLiveNews";
 import HomeSeoContent from "@/components/seo/HomeSeoContent";
 
 export default async function HomeComponent() {
@@ -47,11 +47,9 @@ export default async function HomeComponent() {
 
       <HomeGrowthHub />
 
-      <HomeSeoContent />
+      <HomeLiveNews />
 
-      <div className="border-t border-slate-200">
-        <TrendingWebsites />
-      </div>
+      <HomeSeoContent />
     </main>
   );
 }

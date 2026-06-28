@@ -13,6 +13,9 @@ const navLinks = [
   { href: "/tools", label: "Free Download" },
   { href: "/category/ai-background-remover", label: "Bg remover" },
   { href: "/about", label: "About" },
+  { href: "/ai-directory", label: "AI Directory" },
+  { href: "/prompts", label: "Prompts" },
+  { href: "/ai-news", label: "AI News" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];

@@ -2,16 +2,24 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo/site";
 
 type ToolLink = { name: string; title?: string; url?: string };
 
+type FAQ = { question: string; answer: string };
+
+type HowToStep = { step: number; title: string; text: string };
+
 export default function ToolPageJsonLd({
   slug,
   title,
   description,
   tools,
+  faq,
+  howTo,
 }: {
   slug: string;
   title: string;
   description: string;
   tools?: ToolLink[];
+  faq?: FAQ[];
+  howTo?: HowToStep[];
 }) {
   const pageUrl = `${SITE_URL}/tools/${slug}`;
 
@@ -46,6 +54,36 @@ export default function ToolPageJsonLd({
         position: i + 1,
         name: t.title ?? t.name,
         item: t.url || pageUrl,
+      })),
+    });
+  }
+
+  if (faq?.length) {
+    graphs.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    });
+  }
+
+  if (howTo?.length) {
+    graphs.push({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: `How to use ${title}`,
+      description,
+      step: howTo.map((item) => ({
+        "@type": "HowToStep",
+        position: item.step,
+        name: item.title,
+        text: item.text,
       })),
     });
   }

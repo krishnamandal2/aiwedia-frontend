@@ -23,6 +23,9 @@ const DEFAULT_SITE_CONFIG: Record<string, unknown> = {
     { href: "/tools", label: "Free Downloads", desc: "Social, video, PDF utilities", icon: "download" },
     { href: "/best", label: "Best Guides", desc: "Ranked best-of lists", icon: "best" },
     { href: "/compare", label: "Compare Tools", desc: "Side-by-side comparisons", icon: "compare" },
+    { href: "/prompts", label: "Prompt Library", desc: "Copy-ready AI prompts", icon: "ai" },
+    { href: "/ai-news", label: "AI News", desc: "Latest AI tools & trends", icon: "ai" },
+    { href: "/newsletter", label: "Newsletter", desc: "Weekly AI digest", icon: "ai" },
   ],
   footer_categories: [
     { name: "AI Tools", href: "/category/ai-tools" },
@@ -44,7 +47,8 @@ async function safeFetchInner<T>(url: string): Promise<T | null> {
       const silent =
         url.includes("/api/site") ||
         url.includes("/api/guides/") ||
-        url.includes("/api/comparisons");
+        url.includes("/api/comparisons") ||
+        url.includes("/api/prompts");
       if (process.env.NODE_ENV === "development" && !silent) {
         console.error(`❌ API Error: ${res.status} → ${url}`);
       }
@@ -134,6 +138,35 @@ export async function getComparison(slug: string) {
     toolA: Record<string, unknown>;
     toolB: Record<string, unknown>;
   }>(`${BASE_URL}/api/comparisons/${slug}`);
+}
+
+export type PromptSummary = {
+  slug: string;
+  title: string;
+  category: string;
+  useCase?: string;
+  tags?: string[];
+  metaDescription?: string;
+};
+
+export async function getPrompts(category?: string) {
+  const q = category ? `?category=${encodeURIComponent(category)}` : "";
+  const data = await safeFetch<{ prompts: PromptSummary[] }>(
+    `${BASE_URL}/api/prompts${q}`
+  );
+  return data ?? { prompts: [] };
+}
+
+export const getPromptsCached = unstable_cache(
+  () => getPrompts(),
+  ["prompts-list"],
+  { revalidate: 3600 }
+);
+
+export async function getPrompt(slug: string) {
+  return safeFetch<{ prompt: Record<string, unknown> }>(
+    `${BASE_URL}/api/prompts/${slug}`
+  );
 }
 
 export type GuideSummary = {
