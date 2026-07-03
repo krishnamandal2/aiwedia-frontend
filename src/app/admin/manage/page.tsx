@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 const SECTIONS = [
   { href: "/admin/dashboard", title: "Blogs", desc: "Create & edit blog posts" },
-  { href: "/admin/submissions", title: "Tool submissions", desc: "Approve user suggestions" },
+  { href: "/admin/submissions", title: "Tool submissions", desc: "Edit image, approve & email submitters" },
   { href: "/admin/prompts", title: "Prompt library", desc: "AI prompts for /prompts" },
   { href: "/admin/comments", title: "Comments", desc: "Moderate blog comments" },
   { href: "/admin/newsletter", title: "Newsletter", desc: "Subscriber stats" },

@@ -67,7 +67,7 @@ export default function LoginPage() {
       toast.success("Welcome back!");
 
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/profile";
       }, 500);
 
     } catch {

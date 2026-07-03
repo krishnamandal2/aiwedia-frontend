@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Copy } from "lucide-react";
 import toast from "react-hot-toast";
+import SaveItemButton from "@/components/SaveItemButton";
 
 type PromptDetailProps = {
   prompt: {
@@ -42,14 +43,17 @@ export default function PromptDetailClient({ prompt }: PromptDetailProps) {
           All prompts
         </Link>
 
-        <div className="mt-6">
-          <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold uppercase text-violet-700">
-            {prompt.category}
-          </span>
-          <h1 className="mt-4 text-3xl font-black text-slate-900">{prompt.title}</h1>
-          {prompt.useCase && (
-            <p className="mt-3 text-slate-600">{prompt.useCase}</p>
-          )}
+        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold uppercase text-violet-700">
+              {prompt.category}
+            </span>
+            <h1 className="mt-4 text-3xl font-black text-slate-900">{prompt.title}</h1>
+            {prompt.useCase && (
+              <p className="mt-3 text-slate-600">{prompt.useCase}</p>
+            )}
+          </div>
+          <SaveItemButton type="prompt" slug={prompt.slug} label="Save prompt" />
         </div>
 
         <div className="mt-8 rounded-2xl border border-slate-200 bg-white shadow-sm">

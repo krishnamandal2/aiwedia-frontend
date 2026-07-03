@@ -43,7 +43,15 @@ export async function getNewsRelated(category: string, excludeSlug?: string) {
 }
 
 export async function getToolRelated(categorySlug: string, toolSlug: string) {
-  const empty = { news: [], prompts: [], similarTools: [] };
+  const empty = {
+    news: [],
+    prompts: [],
+    similarTools: [],
+    alternativePage: null,
+    comparisons: [],
+    collections: [],
+    deals: [],
+  };
   if (!BASE) return empty;
 
   try {

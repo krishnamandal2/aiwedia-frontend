@@ -30,8 +30,11 @@ import {
 } from "@/lib/aiToolsUtils";
 import AiToolCard from "./AiToolCard";
 import AiToolPreviewModal from "./AiToolPreviewModal";
+import FollowCategoryButton from "@/components/account/FollowCategoryButton";
 import WebCategoryHelpers from "@/components/category/WebCategoryHelpers";
 import { theme, isAiCategorySlug } from "@/lib/siteTheme";
+import { clientApiUrl } from "@/lib/clientApi";
+import type { BatchRatingsMap } from "@/lib/toolRatingsApi";
 
 const MAX_COMPARE = 3;
 
@@ -70,6 +73,7 @@ export default function AiToolsPlatform({
   const [previewTool, setPreviewTool] = useState<EnrichedAiTool | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showComparePanel, setShowComparePanel] = useState(false);
+  const [communityRatings, setCommunityRatings] = useState<BatchRatingsMap>({});
 
   useEffect(() => {
     try {
@@ -80,6 +84,18 @@ export default function AiToolsPlatform({
       setFavorites(new Set());
     }
   }, [storageKey]);
+
+  useEffect(() => {
+    if (!enriched.length) return;
+    const pairs = enriched
+      .slice(0, 30)
+      .map((t) => `${t.categorySlug}/${t.slug}`)
+      .join(",");
+    fetch(`${clientApiUrl("/api/tools/ratings/batch")}?pairs=${pairs}`)
+      .then((r) => (r.ok ? r.json() : { ratings: {} }))
+      .then((data) => setCommunityRatings(data.ratings || {}))
+      .catch(() => setCommunityRatings({}));
+  }, [enriched]);
 
   const persistFavorites = useCallback(
     (next: Set<string>) => {
@@ -186,13 +202,19 @@ export default function AiToolsPlatform({
           {seoDescription ??
             `Search, filter by type and pricing, save favorites, and compare tools — all in one place.`}
         </p>
-        <p className="mt-3 text-sm">
+        <p className="mt-3 flex flex-wrap items-center gap-3 text-sm">
           <Link
             href="/ai-directory"
             className="font-semibold text-violet-600 hover:text-violet-700 hover:underline"
           >
             Browse all directories →
           </Link>
+          {isAiCategory && (
+            <FollowCategoryButton
+              categorySlug={categorySlug}
+              categoryTitle={title}
+            />
+          )}
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -455,6 +477,9 @@ export default function AiToolsPlatform({
                 onToggleFavorite={toggleFavorite}
                 onToggleCompare={toggleCompare}
                 onPreview={setPreviewTool}
+                communityRating={
+                  communityRatings[`${tool.categorySlug}/${tool.slug}`] || null
+                }
               />
             ))}
           </div>

@@ -32,6 +32,8 @@ export default async function Footer() {
     { name: "Blog", href: "/blog" },
     { name: "Best Guides", href: "/best" },
     { name: "Compare Tools", href: "/compare" },
+    { name: "Alternatives", href: "/alternatives" },
+    { name: "AI Deals", href: "/deals" },
     { name: "Collections", href: "/collections" },
     { name: "Suggest a Tool", href: "/suggest-tool" },
     { name: "About Us", href: "/about" },

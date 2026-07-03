@@ -9,9 +9,8 @@ type HomeCategory = {
   typeui?: string;
 };
 import CategorySection from "@/components/homeuicard/CategorySection";
-import WebUtilitySection from "@/components/home/WebUtilitySection";
 import HomeQuickLinks from "@/components/home/HomeQuickLinks";
-import HomeWhatsNew from "@/components/home/HomeWhatsNew";
+import HomeRecentlyAdded from "@/components/home/HomeRecentlyAdded";
 import HomeDiscover from "@/components/home/HomeDiscover";
 import HomeGrowthHub from "@/components/home/HomeGrowthHub";
 import HomeLiveNews from "@/components/home/HomeLiveNews";
@@ -24,13 +23,11 @@ export default async function HomeComponent() {
 
   const aiCategories = categories.filter((cat) => cat.typeui === "ai");
 
-  const webCategories = categories.filter((cat) => cat.typeui === "web");
-
   return (
     <main className="min-h-screen bg-white">
       <HeroSection />
       <HomeQuickLinks />
-      <HomeWhatsNew />
+      <HomeRecentlyAdded />
 
       <CategorySection
         id="categories"
@@ -42,8 +39,6 @@ export default async function HomeComponent() {
       />
 
       <HomeDiscover />
-
-      <WebUtilitySection categories={webCategories} />
 
       <HomeGrowthHub />
 

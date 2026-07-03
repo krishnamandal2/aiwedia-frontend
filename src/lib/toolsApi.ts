@@ -103,6 +103,7 @@ export async function submitTool(payload: {
   toolUrl: string;
   categorySlug: string;
   description?: string;
+  imageUrl?: string;
   submitterName?: string;
   submitterEmail: string;
 }) {

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, Star } from "lucide-react";
 import { trackOutboundLink } from "@/lib/analytics";
+import CommunityRatingBadge from "@/components/tools/CommunityRatingBadge";
+import type { ToolRatingSummary } from "@/lib/toolRatingsApi";
 
 export interface DirectoryTool {
   title: string;
@@ -16,9 +18,16 @@ export interface DirectoryTool {
   url?: string;
   editorScore?: number | null;
   editorsPick?: boolean;
+  communityRating?: ToolRatingSummary | null;
 }
 
-export default function ToolDirectoryCard({ tool }: { tool: DirectoryTool }) {
+export default function ToolDirectoryCard({
+  tool,
+  communityRating,
+}: {
+  tool: DirectoryTool;
+  communityRating?: ToolRatingSummary | null;
+}) {
   const href = tool.launchUrl || tool.url || "#";
   const detailHref = `/tool/${tool.categorySlug}/${tool.slug}`;
   const hasImage = Boolean(tool.image?.trim());
@@ -57,6 +66,10 @@ export default function ToolDirectoryCard({ tool }: { tool: DirectoryTool }) {
             {tool.editorScore}/10
           </span>
         )}
+        <CommunityRatingBadge
+          rating={communityRating}
+          className="absolute bottom-3 left-3"
+        />
       </div>
       <div className="flex flex-1 flex-col p-4">
         <Link

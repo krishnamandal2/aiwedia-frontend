@@ -73,8 +73,8 @@ export default function RegisterPage() {
       toast.success("Welcome to AiWedia!");
 
       setTimeout(() => {
-        window.location.href = "/";
-      }, 1000);
+        window.location.href = "/profile";
+      }, 800);
 
     } catch {
       toast.error("Server error");

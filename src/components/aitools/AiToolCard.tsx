@@ -9,9 +9,11 @@ import {
   ExternalLink,
   Sparkles,
   Star,
+  Users,
 } from "lucide-react";
 import type { EnrichedAiTool } from "@/lib/aiToolsUtils";
 import { trackOutboundLink } from "@/lib/analytics";
+import type { ToolRatingSummary } from "@/lib/toolRatingsApi";
 
 const PRICING_STYLES = {
   free: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -39,6 +41,7 @@ interface AiToolCardProps {
   onToggleCompare: (slug: string) => void;
   onPreview: (tool: EnrichedAiTool) => void;
   view: "grid" | "list";
+  communityRating?: ToolRatingSummary | null;
 }
 
 export default function AiToolCard({
@@ -50,6 +53,7 @@ export default function AiToolCard({
   onToggleCompare,
   onPreview,
   view,
+  communityRating,
 }: AiToolCardProps) {
   const initials = tool.title
     .split(" ")
@@ -101,6 +105,14 @@ export default function AiToolCard({
               <span className="inline-flex items-center gap-0.5 rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-bold text-slate-700">
                 <Star size={8} className="fill-amber-400 text-amber-500" />
                 {tool.editorScore}
+              </span>
+            )}
+            {communityRating && communityRating.count > 0 && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-slate-900 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                <Star size={8} className="fill-amber-400 text-amber-400" />
+                {communityRating.average}
+                <Users size={8} className="opacity-70" />
+                {communityRating.count}
               </span>
             )}
             <span
@@ -208,6 +220,15 @@ export default function AiToolCard({
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-600">
               <Star size={10} className="fill-amber-400 text-amber-500" />
               {tool.editorScore}/10
+            </span>
+          )}
+          {communityRating && communityRating.count > 0 && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-600">
+              <Star size={10} className="fill-amber-400 text-amber-500" />
+              {communityRating.average}
+              <span className="font-normal text-slate-400">
+                ({communityRating.count})
+              </span>
             </span>
           )}
         </div>

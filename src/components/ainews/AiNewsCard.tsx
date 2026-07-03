@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Clock, ChevronRight } from "lucide-react";
+import { ExternalLink, Clock, ChevronRight, Star } from "lucide-react";
 import {
   AI_NEWS_CATEGORY_LABELS,
   type AiNewsItem,
@@ -26,7 +26,7 @@ export default function AiNewsCard({
     size === "large" ? "aspect-[16/9] min-h-[200px]" : "aspect-[16/9]";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-violet-200 hover:shadow-lg">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm ring-1 ring-slate-900/5 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-100/50">
       <Link href={`/ai-news/${item.slug}`} className="block">
         {item.imageUrl ? (
           <div className={`relative overflow-hidden bg-slate-100 ${imageAspect}`}>
@@ -59,6 +59,17 @@ export default function AiNewsCard({
           >
             {categoryLabel}
           </Link>
+          {item.aiwediaScore != null && item.aiwediaScore > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 font-bold text-amber-800">
+              <Star size={11} className="fill-amber-400 text-amber-500" />
+              {item.aiwediaScore}
+            </span>
+          )}
+          {item.aiwediaScore != null && item.aiwediaScore >= 8.5 && (
+            <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700">
+              Hot
+            </span>
+          )}
           <span className="font-medium text-slate-400">{item.sourceName}</span>
         </div>
 

@@ -1,68 +1,110 @@
 import Link from "next/link";
-import { Layers, ArrowUpRight } from "lucide-react";
+import { Layers, ArrowUpRight, Sparkles } from "lucide-react";
 import { fetchCollections } from "@/lib/toolsApi";
 import { buildPageMetadata } from "@/lib/seo/buildMetadata";
-import { theme } from "@/lib/siteTheme";
 
 export const metadata = buildPageMetadata({
-  title: "Curated AI Tool Collections",
+  title: "AI Tool Collections — Best-of Lists & Curated Stacks",
   description:
-    "Hand-picked stacks for SEO, vibe coding, and more — explore curated tool lists on AIWedia.",
+    "Best AI tools for students, coding, video, startups, and free tiers — plus curated stacks on AIWedia.",
   path: "/collections",
 });
+
+function CollectionCard({
+  c,
+}: {
+  c: {
+    slug: string;
+    title: string;
+    description: string;
+    toolCount: number;
+    featured?: boolean;
+  };
+}) {
+  return (
+    <Link
+      href={`/collections/${c.slug}`}
+      className="group flex h-full flex-col rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-lg"
+    >
+      <div className="mb-3 inline-flex rounded-xl bg-violet-100 p-2.5 text-violet-600">
+        <Layers size={20} />
+      </div>
+      {c.featured && (
+        <span className="mb-2 inline-block w-fit rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-800">
+          Featured
+        </span>
+      )}
+      <h2 className="text-lg font-bold text-slate-900 group-hover:text-violet-700">
+        {c.title}
+      </h2>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
+        {c.description}
+      </p>
+      <p className="mt-3 text-xs font-medium text-slate-400">
+        {c.toolCount} tools
+      </p>
+      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-violet-600">
+        Open collection
+        <ArrowUpRight size={14} />
+      </span>
+    </Link>
+  );
+}
 
 export default async function CollectionsPage() {
   const { collections } = await fetchCollections();
 
+  const bestOf = collections.filter((c: { slug: string }) =>
+    c.slug.startsWith("best-")
+  );
+  const stacks = collections.filter(
+    (c: { slug: string }) => !c.slug.startsWith("best-")
+  );
+
   return (
-    <div className={theme.page}>
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-        <div className="mb-10">
-          <span className={theme.badge}>Collections</span>
-          <h1 className="mt-3 text-3xl font-black text-slate-900">
-            Curated tool stacks
+    <div className="min-h-screen bg-gradient-to-b from-violet-50/40 via-white to-slate-50">
+      <div className="border-b border-violet-100 bg-white/80">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <span className="inline-flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-700">
+            <Sparkles size={14} />
+            Collections
+          </span>
+          <h1 className="mt-3 text-3xl font-black text-slate-900 sm:text-4xl">
+            AI collections
           </h1>
-          <p className="mt-2 max-w-2xl text-slate-600">
-            Editor-curated bundles so you can adopt a proven toolkit without
-            comparing dozens of apps.
+          <p className="mt-3 max-w-2xl text-slate-600">
+            Best-of lists and curated stacks — pick a toolkit without comparing
+            dozens of apps.
           </p>
         </div>
+      </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          {collections.map(
-            (c: {
-              slug: string;
-              title: string;
-              description: string;
-              toolCount: number;
-              featured?: boolean;
-            }) => (
-              <Link
-                key={c.slug}
-                href={`/collections/${c.slug}`}
-                className={`block p-6 ${theme.card} ${theme.cardHover}`}
-              >
-                <div className="mb-3 inline-flex rounded-xl bg-indigo-100 p-2 text-indigo-700">
-                  <Layers size={20} />
-                </div>
-                {c.featured && (
-                  <span className="mb-2 inline-block rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-bold uppercase text-violet-700">
-                    Featured
-                  </span>
-                )}
-                <h2 className="text-lg font-bold text-slate-900">{c.title}</h2>
-                <p className="mt-2 text-sm text-slate-600">{c.description}</p>
-                <p className="mt-3 text-xs font-medium text-slate-500">
-                  {c.toolCount} tools
-                </p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-violet-600">
-                  Open collection
-                  <ArrowUpRight size={14} />
-                </span>
-              </Link>
-            )
-          )}
-        </div>
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
+        {bestOf.length > 0 && (
+          <section className="mb-12">
+            <h2 className="mb-6 text-xl font-bold text-slate-900">
+              Best AI collections
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {bestOf.map((c: Parameters<typeof CollectionCard>[0]["c"]) => (
+                <CollectionCard key={c.slug} c={c} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {stacks.length > 0 && (
+          <section>
+            <h2 className="mb-6 text-xl font-bold text-slate-900">
+              Curated stacks
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2">
+              {stacks.map((c: Parameters<typeof CollectionCard>[0]["c"]) => (
+                <CollectionCard key={c.slug} c={c} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {collections.length === 0 && (
           <p className="text-slate-500">

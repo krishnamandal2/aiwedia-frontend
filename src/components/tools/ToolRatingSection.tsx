@@ -28,9 +28,19 @@ export default function ToolRatingSection({
 
   useEffect(() => {
     if (!API) return;
-    fetch(base)
+    const headers: HeadersInit = {};
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    fetch(base, { headers })
       .then((r) => r.json())
-      .then((d) => setStats({ average: d.average || 0, count: d.count || 0 }))
+      .then((d) =>
+        setStats({
+          average: d.average || 0,
+          count: d.count || 0,
+          yourRating: d.yourRating,
+        })
+      )
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [API, base]);
@@ -40,9 +50,13 @@ export default function ToolRatingSection({
     setSubmitting(true);
     setPicked(rating);
     try {
+      const headers: HeadersInit = { "Content-Type": "application/json" };
+      const token = localStorage.getItem("token");
+      if (token) headers.Authorization = `Bearer ${token}`;
+
       const res = await fetch(base, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ rating }),
       });
       const data = await res.json();
@@ -55,7 +69,11 @@ export default function ToolRatingSection({
         count: data.count,
         yourRating: data.yourRating,
       });
-      toast.success("Thanks for rating this tool!");
+      toast.success(
+        data.savedToAccount
+          ? "Rating saved to your account!"
+          : "Thanks for rating this tool!"
+      );
     } catch {
       toast.error("Server error");
     } finally {

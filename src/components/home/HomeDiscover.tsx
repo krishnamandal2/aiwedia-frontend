@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Image, Code, FileText, Gamepad2, Search } from "lucide-react";
+import { ArrowRight, Bot, Code, Image, Search } from "lucide-react";
 
 const DISCOVER = [
   {
@@ -21,15 +21,9 @@ const DISCOVER = [
     color: "text-violet-400 bg-violet-500/10",
   },
   {
-    slug: "pdf-and-document-tools",
-    title: "PDF & documents",
-    icon: FileText,
-    color: "text-amber-400 bg-amber-500/10",
-  },
-  {
-    slug: "online-games",
-    title: "Online games",
-    icon: Gamepad2,
+    slug: "ai-tools",
+    title: "All AI tools",
+    icon: Bot,
     color: "text-cyan-400 bg-cyan-500/10",
   },
 ];
@@ -48,8 +42,8 @@ export default function HomeDiscover() {
                 Find the right category in seconds
               </h2>
               <p className="mt-3 text-slate-400">
-                Use the search bar above or browse popular paths — image filters,
-                code generators, PDF tools, and more.
+                Use the search bar above or browse popular AI paths — SEO suites,
+                code assistants, image generators, and the full directory.
               </p>
               <Link
                 href="/#categories"

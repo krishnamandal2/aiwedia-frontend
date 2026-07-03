@@ -65,7 +65,7 @@ export default function AiNewsFeatured({
   }
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg ring-1 ring-slate-900/5">
       <div className="grid lg:grid-cols-2">
         <Link
           href={`/ai-news/${item.slug}`}

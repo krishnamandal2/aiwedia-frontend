@@ -93,6 +93,14 @@ export const clientApi = {
         }),
       remove: (id: string) =>
         adminFetch(`/comparisons/${id}`, { method: "DELETE" }),
+      resolveSpecs: (toolASlug: string, toolBSlug: string) =>
+        adminFetch<{ specsA: Record<string, string>; specsB: Record<string, string> }>(
+          "/comparisons/resolve-specs",
+          {
+            method: "POST",
+            body: JSON.stringify({ toolASlug, toolBSlug }),
+          }
+        ),
     },
     prompts: {
       list: () => adminFetch<{ prompts: unknown[] }>("/prompts"),

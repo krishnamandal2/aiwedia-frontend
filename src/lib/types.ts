@@ -1,5 +1,26 @@
 /** Shared types — safe to import from Client and Server Components */
 
+export interface ToolIntelligence {
+  popularityScore: number;
+  trafficTrend: "rising" | "stable" | "declining";
+  trafficTrendLabel?: string;
+  aiSummary: string;
+  features: string[];
+  pros: string[];
+  cons: string[];
+  useCases: string[];
+  pricingSnapshot?: string;
+  pricingHistory?: {
+    date: string;
+    plan: string;
+    price: string;
+    note?: string;
+  }[];
+  communityRating?: { average: number; count: number };
+  source?: "curated" | "editorial" | "generated";
+  updatedAt?: string | null;
+}
+
 export interface Tool {
   slug: string;
   title: string;
@@ -13,6 +34,7 @@ export interface Tool {
   editorsPick?: boolean;
   affiliateUrl?: string;
   launchUrl?: string;
+  intelligence?: ToolIntelligence;
 }
 
 export interface FaqItem {

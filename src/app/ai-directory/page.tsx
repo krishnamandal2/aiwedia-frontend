@@ -62,6 +62,13 @@ const HUB_SECTIONS = [
     accent: "from-blue-600 to-cyan-600",
   },
   {
+    href: "/stacks",
+    title: "AI Stacks",
+    desc: "Curated workflows — SEO, coding, startups, creators.",
+    icon: Workflow,
+    accent: "from-emerald-600 to-teal-600",
+  },
+  {
     href: "/prompts",
     title: "AI Prompt Library",
     desc: "Copy-ready prompts for SEO, coding, marketing & more.",

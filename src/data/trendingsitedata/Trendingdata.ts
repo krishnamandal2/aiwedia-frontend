@@ -2,6 +2,7 @@ export type Website = {
   name: string;
   url: string;
   description: string;
+  category?: import("@/lib/trendingUtils").TrendCategory;
 };
 
 export const trendingData: Record<string, Website[] | "coming-soon"> = {

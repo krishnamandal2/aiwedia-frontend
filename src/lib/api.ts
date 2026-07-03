@@ -395,6 +395,11 @@ export type RecentToolCard = {
   categorySlug: string;
   categoryTitle?: string;
   href: string;
+  launchUrl?: string;
+  benefits?: string[];
+  editorScore?: number | null;
+  editorsPick?: boolean;
+  rank?: number;
 };
 
 /** Only returns tools whose detail page can be resolved (no 404 links) */
@@ -406,7 +411,7 @@ export async function getVerifiedRecentTools(
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/tools/recent?days=${days}&limit=${limit}`,
+      `${BASE_URL}/api/tools/recent?days=${days}&limit=${limit}&typeui=ai`,
       { next: { revalidate: 120 } }
     );
     if (res.ok) {
@@ -468,13 +473,18 @@ export async function getVerifiedRecentTools(
       href:
         detail.canonicalPath ||
         `/tool/${detail.category.slug}/${detail.tool.slug}`,
+      launchUrl: detail.tool.launchUrl || detail.tool.url,
+      benefits: detail.tool.benefits || [],
+      editorScore: detail.tool.editorScore,
+      editorsPick: detail.tool.editorsPick,
+      rank: detail.tool.rank,
     });
     if (verified.length >= 8) break;
   }
 
   const subtitle =
     verified.length > 0
-      ? "Hand-picked AI tools — click for full details"
+      ? "Fresh AI tools added to the directory — explore reviews and launch links"
       : "";
 
   return { tools: verified, subtitle };

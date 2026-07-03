@@ -12,6 +12,9 @@ import {
   Loader2,
   BookOpen,
   GitCompare,
+  Sparkles,
+  Newspaper,
+  Star,
 } from "lucide-react";
 import { theme } from "@/lib/siteTheme";
 import { clientApi } from "@/lib/api-client";
@@ -22,7 +25,9 @@ type ResultType =
   | "blog"
   | "free_tool"
   | "guide"
-  | "comparison";
+  | "comparison"
+  | "prompt"
+  | "ai_news";
 
 interface SearchResultItem {
   type: ResultType;
@@ -32,6 +37,7 @@ interface SearchResultItem {
   categorySlug?: string;
   categoryTitle?: string;
   image?: string;
+  score?: number;
 }
 
 const TYPE_META: Record<
@@ -39,45 +45,77 @@ const TYPE_META: Record<
   { label: string; icon: typeof Bot; href: (i: SearchResultItem) => string }
 > = {
   category: {
-    label: "Category",
+    label: "Categories",
     icon: FolderOpen,
     href: (i) => `/category/${i.slug}`,
   },
   tool: {
-    label: "AI Tool",
+    label: "AI Tools",
     icon: Bot,
     href: (i) =>
       i.categorySlug
         ? `/tool/${i.categorySlug}/${i.slug}`
-        : `/category/${i.categorySlug}`,
+        : `/category/ai-tools`,
+  },
+  ai_news: {
+    label: "AI News",
+    icon: Newspaper,
+    href: (i) => `/ai-news/${i.slug}`,
+  },
+  prompt: {
+    label: "Prompts",
+    icon: Sparkles,
+    href: (i) => `/prompts/${i.slug}`,
   },
   blog: {
     label: "Blog",
     icon: FileText,
     href: (i) => `/blog/${i.slug}`,
   },
-  free_tool: {
-    label: "Free tool",
-    icon: Download,
-    href: (i) => `/tools/${i.slug}`,
-  },
   guide: {
-    label: "Best guide",
+    label: "Best guides",
     icon: BookOpen,
     href: (i) => `/best/${i.slug}`,
   },
   comparison: {
-    label: "Comparison",
+    label: "Comparisons",
     icon: GitCompare,
     href: (i) => `/compare/${i.slug}`,
   },
+  free_tool: {
+    label: "Free tools",
+    icon: Download,
+    href: (i) => `/tools/${i.slug}`,
+  },
 };
+
+const FILTER_OPTIONS: { id: "all" | ResultType; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "tool", label: "Tools" },
+  { id: "ai_news", label: "News" },
+  { id: "prompt", label: "Prompts" },
+  { id: "category", label: "Categories" },
+  { id: "blog", label: "Blog" },
+  { id: "guide", label: "Guides" },
+];
+
+const DISPLAY_ORDER: ResultType[] = [
+  "tool",
+  "ai_news",
+  "prompt",
+  "category",
+  "blog",
+  "guide",
+  "comparison",
+  "free_tool",
+];
 
 function SearchResults() {
   const searchParams = useSearchParams();
   const q = searchParams.get("q") || "";
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState<"all" | ResultType>("all");
 
   useEffect(() => {
     if (!q.trim()) {
@@ -87,12 +125,17 @@ function SearchResults() {
     setLoading(true);
     clientApi
       .search(q)
-      .then((data) => setResults(Array.isArray(data) ? (data as SearchResultItem[]) : []))
+      .then((data) =>
+        setResults(Array.isArray(data) ? (data as SearchResultItem[]) : [])
+      )
       .catch(() => setResults([]))
       .finally(() => setLoading(false));
   }, [q]);
 
-  const grouped = results.reduce(
+  const filtered =
+    filter === "all" ? results : results.filter((r) => r.type === filter);
+
+  const grouped = filtered.reduce(
     (acc, item) => {
       if (!acc[item.type]) acc[item.type] = [];
       acc[item.type].push(item);
@@ -110,19 +153,57 @@ function SearchResults() {
           </div>
           <div>
             <h1 className="text-xl font-black text-slate-900 sm:text-2xl">
-              Search results
+              Search AIWedia
             </h1>
             {q && (
               <p className="text-sm text-slate-500">
-                for &ldquo;<span className="font-medium text-slate-800">{q}</span>
-                &rdquo;
+                {filtered.length} result{filtered.length !== 1 ? "s" : ""} for{" "}
+                <span className="font-medium text-slate-800">&ldquo;{q}&rdquo;</span>
               </p>
             )}
           </div>
         </div>
 
         {!q && (
-          <p className="text-slate-500">Enter a query in the header search box.</p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
+            <p className="text-slate-600">
+              Search tools, AI news, prompts, guides, and categories from the header.
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs font-semibold text-violet-700">
+              <Link href="/ai-directory">AI Directory</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/ai-news">AI News</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/prompts">Prompts</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/stacks">AI Stacks</Link>
+            </div>
+          </div>
+        )}
+
+        {q && !loading && results.length > 0 && (
+          <div className="mb-6 flex flex-wrap gap-2">
+            {FILTER_OPTIONS.map((opt) => {
+              const count =
+                opt.id === "all"
+                  ? results.length
+                  : results.filter((r) => r.type === opt.id).length;
+              if (opt.id !== "all" && count === 0) return null;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setFilter(opt.id)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                    filter === opt.id ? theme.chipActive : theme.chipIdle
+                  }`}
+                >
+                  {opt.label}
+                  <span className="ml-1 opacity-70">({count})</span>
+                </button>
+              );
+            })}
+          </div>
         )}
 
         {loading && (
@@ -132,12 +213,12 @@ function SearchResults() {
           </p>
         )}
 
-        {!loading && q && results.length === 0 && (
+        {!loading && q && filtered.length === 0 && (
           <p className="text-slate-500">No results found. Try different keywords.</p>
         )}
 
         {!loading &&
-          (Object.keys(TYPE_META) as ResultType[]).map((type) => {
+          DISPLAY_ORDER.map((type) => {
             const items = grouped[type];
             if (!items?.length) return null;
             const meta = TYPE_META[type];
@@ -153,15 +234,23 @@ function SearchResults() {
                     <li key={`${type}-${idx}`}>
                       <Link
                         href={meta.href(item)}
-                        className={`block rounded-xl border border-slate-200 px-4 py-3 transition hover:border-violet-300 hover:bg-violet-50/50 ${theme.card}`}
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:border-violet-300 hover:bg-violet-50/50"
                       >
-                        <span className="font-semibold text-slate-900">
-                          {item.title}
-                        </span>
-                        {item.subtitle && (
-                          <p className="mt-0.5 line-clamp-1 text-sm text-slate-500">
-                            {item.subtitle}
-                          </p>
+                        <div className="min-w-0">
+                          <span className="font-semibold text-slate-900">
+                            {item.title}
+                          </span>
+                          {item.subtitle && (
+                            <p className="mt-0.5 line-clamp-1 text-sm text-slate-500">
+                              {item.subtitle}
+                            </p>
+                          )}
+                        </div>
+                        {item.score != null && item.score > 0 && (
+                          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-800">
+                            <Star size={12} className="fill-amber-400 text-amber-500" />
+                            {item.score}
+                          </span>
                         )}
                       </Link>
                     </li>

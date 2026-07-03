@@ -33,10 +33,10 @@ export default function MobileProfileMenu() {
     return (
       <Link
         href="/login"
-        className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-all active:scale-90"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-violet-300"
         aria-label="Sign in"
       >
-        <User size={20} />
+        <User size={18} />
       </Link>
     );
   }

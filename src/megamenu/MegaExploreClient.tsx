@@ -80,7 +80,7 @@ export default function MegaExploreClient({
           role="dialog"
           aria-modal="true"
           aria-label="Browse categories"
-          className="fixed left-1/2 z-[999] w-[min(calc(100vw-1.5rem),720px)] -translate-x-1/2 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-xl shadow-slate-900/10"
+          className="fixed left-1/2 z-[999] w-[min(calc(100vw-1.5rem),780px)] -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xl shadow-slate-900/10"
           style={{ top: "var(--mega-menu-top, 72px)" }}
         >
           <MegaMenuPanel
@@ -94,13 +94,13 @@ export default function MegaExploreClient({
     );
 
   return (
-    <div ref={containerRef} className="relative hidden lg:flex">
+    <div ref={containerRef} className="relative flex">
       <button
         type="button"
-        className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-semibold transition ${
+        className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-semibold transition ${
           isOpen
-            ? "border-violet-500 bg-violet-50 text-violet-700"
-            : "border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:bg-slate-50"
+            ? "border-violet-400 bg-violet-50 text-violet-800 shadow-sm"
+            : "border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50/50"
         }`}
         onClick={() => setIsOpen((o) => !o)}
         aria-expanded={isOpen}
@@ -108,7 +108,8 @@ export default function MegaExploreClient({
         aria-haspopup="dialog"
       >
         <LayoutGrid size={16} className="text-violet-600" />
-        <span>Browse</span>
+        <span className="hidden sm:inline">Categories</span>
+        <span className="sm:hidden">Browse</span>
         <ChevronDown
           size={14}
           className={`opacity-60 transition ${isOpen ? "rotate-180" : ""}`}

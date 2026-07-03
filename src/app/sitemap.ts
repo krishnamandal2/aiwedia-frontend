@@ -121,6 +121,19 @@ async function fetchComparisonSlugs(): Promise<string[]> {
   }
 }
 
+async function fetchAlternativeSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/alternatives`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.alternatives || []).map((a: { slug: string }) => a.slug);
+  } catch {
+    return [];
+  }
+}
+
 async function fetchCollectionSlugs(): Promise<string[]> {
   try {
     const res = await fetch(`${API_URL}/api/collections`, {
@@ -208,6 +221,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
   const collectionSlugs = await fetchCollectionSlugs();
   const comparisonSlugs = await fetchComparisonSlugs();
+  const alternativeSlugs = await fetchAlternativeSlugs();
   const promptSlugs = await fetchPromptSlugs();
   const aiNewsSlugs = await fetchAiNewsSlugs();
   const toolDetailUrls = await fetchAiToolDetailUrls();
@@ -275,6 +289,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
 
     {
+      url: `${BASE_URL}/deals`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: `${BASE_URL}/deals/lifetime-deals`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.82,
+    },
+    {
+      url: `${BASE_URL}/deals/student-discounts`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.82,
+    },
+    {
+      url: `${BASE_URL}/deals/startup-credits`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.82,
+    },
+
+    {
       url: `${BASE_URL}/suggest-tool`,
       lastModified: new Date("2026-05-22"),
       changeFrequency: "monthly",
@@ -289,10 +328,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
 
     {
+      url: `${BASE_URL}/alternatives`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.87,
+    },
+
+    {
       url: `${BASE_URL}/prompts`,
       lastModified: new Date("2026-05-22"),
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+
+    {
+      url: `${BASE_URL}/stacks`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.88,
+    },
+    {
+      url: `${BASE_URL}/stacks/seo`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/stacks/vibe-coding`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/stacks/startup`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/stacks/content-creator`,
+      lastModified: new Date("2026-05-22"),
+      changeFrequency: "weekly",
+      priority: 0.85,
     },
 
     {
@@ -415,6 +492,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
+  const alternativeUrls = alternativeSlugs.map((slug) => ({
+    url: `${BASE_URL}/alternatives/${slug}`,
+    lastModified: new Date("2026-05-22"),
+    changeFrequency: "weekly" as const,
+    priority: 0.86,
+  }));
+
   const promptUrls = promptSlugs.map((slug) => ({
     url: `${BASE_URL}/prompts/${slug}`,
     lastModified: new Date("2026-05-22"),
@@ -441,6 +525,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...bestGuideUrls,
     ...collectionUrls,
     ...comparisonUrls,
+    ...alternativeUrls,
     ...promptUrls,
     ...aiNewsUrls,
     ...toolDetailUrls,
