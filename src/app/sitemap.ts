@@ -78,10 +78,10 @@ async function safeFetch(url: string) {
 ========================= */
 
 async function fetchBlogs() {
-  const data = (await safeFetch(
-    `${API_URL}/api/blogs/public?page=1&limit=500`
-  )) as { blogs?: { slug: string }[] } | null;
-  return data?.blogs ?? [];
+  // safeFetch already unwraps `data.blogs` to an array
+  return asArray<{ slug: string; updatedAt?: string; createdAt?: string }>(
+    await safeFetch(`${API_URL}/api/blogs/public?page=1&limit=500`)
+  );
 }
 
 async function fetchCategories() {
@@ -209,22 +209,39 @@ async function fetchAiToolDetailUrls() {
 ========================= */
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date();
 
-  const blogs = asArray<{ slug: string; updatedAt?: string; createdAt?: string }>(
-    await fetchBlogs()
-  );
-  const categories = asArray<{ slug: string; updatedAt?: string }>(
-    await fetchCategories()
-  );
-  const tools = asArray<{ slug: string; updatedAt?: string }>(
-    await fetchTools()
-  );
-  const collectionSlugs = await fetchCollectionSlugs();
-  const comparisonSlugs = await fetchComparisonSlugs();
-  const alternativeSlugs = await fetchAlternativeSlugs();
-  const promptSlugs = await fetchPromptSlugs();
-  const aiNewsSlugs = await fetchAiNewsSlugs();
-  const toolDetailUrls = await fetchAiToolDetailUrls();
+  const [
+    blogsRaw,
+    categories,
+    tools,
+    collectionSlugs,
+    comparisonSlugs,
+    alternativeSlugs,
+    promptSlugs,
+    aiNewsSlugs,
+    toolDetailUrls,
+  ] = await Promise.all([
+    fetchBlogs(),
+    fetchCategories().then((d) =>
+      asArray<{ slug: string; updatedAt?: string }>(d)
+    ),
+    fetchTools().then((d) =>
+      asArray<{ slug: string; updatedAt?: string }>(d)
+    ),
+    fetchCollectionSlugs(),
+    fetchComparisonSlugs(),
+    fetchAlternativeSlugs(),
+    fetchPromptSlugs(),
+    fetchAiNewsSlugs(),
+    fetchAiToolDetailUrls(),
+  ]);
+
+  const blogs = asArray<{
+    slug: string;
+    updatedAt?: string;
+    createdAt?: string;
+  }>(blogsRaw);
 
   /* =========================
      STATIC PAGES
@@ -234,102 +251,109 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     {
       url: BASE_URL,
-      lastModified: new Date("2026-01-01"),
+      lastModified: now,
       changeFrequency: "daily",
       priority: 1,
     },
 
     {
       url: `${BASE_URL}/blog`,
-      lastModified: new Date("2026-01-01"),
+      lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
     },
 
     {
       url: `${BASE_URL}/tools`,
-      lastModified: new Date("2026-01-01"),
+      lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
     },
 
     {
       url: `${BASE_URL}/top-trending-websites`,
-      lastModified: new Date("2026-01-01"),
+      lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
     },
 
     {
       url: `${BASE_URL}/ai-directory`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
     },
 
     {
       url: `${BASE_URL}/web-directory`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
     },
 
     {
       url: `${BASE_URL}/best`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
 
     {
       url: `${BASE_URL}/collections`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.85,
     },
 
     {
       url: `${BASE_URL}/deals`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.86,
     },
     {
       url: `${BASE_URL}/deals/lifetime-deals`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.82,
     },
     {
       url: `${BASE_URL}/deals/student-discounts`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.82,
     },
     {
       url: `${BASE_URL}/deals/startup-credits`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.82,
     },
 
     {
       url: `${BASE_URL}/suggest-tool`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.6,
     },
 
     {
+      url: `${BASE_URL}/for-ai`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.88,
+    },
+
+    {
       url: `${BASE_URL}/compare`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.88,
     },
 
     {
       url: `${BASE_URL}/alternatives`,
-      lastModified: new Date("2026-05-22"),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.87,
     },

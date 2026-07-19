@@ -32,6 +32,8 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   images: {
+    // User-submitted tools use logos from many domains (e.g. topaitools.app).
+    // Keep Cloudinary first; allow any https host so next/image does not crash.
     remotePatterns: [
       {
         protocol: "https",
@@ -42,11 +44,20 @@ const nextConfig = {
         protocol: "https",
         hostname: "**.cloudinary.com",
       },
-         
+      {
+        protocol: "https",
+        hostname: "**",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+        pathname: "/**",
+      },
     ],
-
-    // ✅ ADD THIS
     qualities: [70, 75, 80],
+    minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
+    formats: ["image/avif", "image/webp"],
   },
 };
 

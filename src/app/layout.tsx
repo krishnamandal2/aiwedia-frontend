@@ -11,45 +11,40 @@ import ConsentGatedAnalytics from "@/components/consent/ConsentGatedAnalytics";
 import CookieConsentBanner from "@/components/consent/CookieConsentBanner";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aiwedia.com"),
 
-    alternates: {
-    canonical: "/",
-  },
-
-   verification: {
-    google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M"
+  verification: {
+    google: "bhHsDR9p0n7Llb4acGm-q12PFDQ4QuhKVHVFCbC991M",
   },
 
   title: {
-    default: "Aiwedia - Best AI Tools, Developer Resources & Tech News",
-    template: "%s | Aiwedia",
+    default: "AIWedia — Best AI Tools Directory 2026 | Coding, SEO & Free Tools",
+    template: "%s | AIWedia",
   },
 
   description:
-    "Discover the best AI tools, developer resources, gaming updates, SEO tools, PDF tools and trending tech news on Aiwedia.",
+    "Discover and compare the best AI tools for coding, SEO, images, and agents. Free downloads, deals, alternatives, and AIWedia Intelligence on every listing.",
 
-keywords: [
+  keywords: [
+    "AIWedia",
     "best AI tools",
     "AI tools directory",
-    "top websites 2026",
-    "free AI tools",
-    "top-trending-websites",
-    "AI tools for developers",
-    "AI image generator",
-    "PDF tools online",
-    "SEO tools for bloggers",
-    "latest tech news",
-],
+    "ChatGPT alternatives",
+    "AI coding tools",
+    "AI SEO tools",
+    "free AI tools 2026",
+    "compare AI tools",
+    "AI deals",
+  ],
 
-  authors: [{ name: "Krishna" }],
-  creator: "Aiwedia",
-  publisher: "Aiwedia",
+  authors: [{ name: "AIWedia" }],
+  creator: "AIWedia",
+  publisher: "AIWedia",
 
   robots: {
     index: true,
@@ -63,8 +58,6 @@ keywords: [
     },
   },
 
- 
-
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
@@ -74,29 +67,27 @@ keywords: [
   openGraph: {
     type: "website",
     url: "https://aiwedia.com",
-    title: "Aiwedia - Best AI Tools & Developer Resources",
+    title: "AIWedia — Best AI Tools Directory 2026",
     description:
-      "Explore top AI tools, developer utilities, SEO tools, gaming content and trending tech updates.",
-    siteName: "Aiwedia",
+      "Compare AI tools, find alternatives, and explore deals — curated with AIWedia Intelligence.",
+    siteName: "AIWedia",
     images: [
       {
-        url: "/og-image.png", 
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Aiwedia Preview",
+        alt: "AIWedia — AI Tools Directory",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Aiwedia - Best AI Tools & Developer Resources",
+    title: "AIWedia — Best AI Tools Directory 2026",
     description:
-      "Explore top AI tools, developer utilities, SEO tools, gaming content and trending tech updates.",
+      "Compare AI tools, find alternatives, and explore deals on AIWedia.",
     images: ["/og-image.png"],
   },
-
-  
 };
 
 export default function RootLayout({
@@ -119,7 +110,8 @@ export default function RootLayout({
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        name: "Aiwedia",
+        "@id": "https://aiwedia.com/#organization",
+        name: "AIWedia",
         url: "https://aiwedia.com",
         logo: "https://aiwedia.com/favicon.png",
         sameAs: ["https://x.com/aiwedia1"],
@@ -127,8 +119,10 @@ export default function RootLayout({
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "Aiwedia",
+        "@id": "https://aiwedia.com/#website",
+        name: "AIWedia",
         url: "https://aiwedia.com",
+        publisher: { "@id": "https://aiwedia.com/#organization" },
         potentialAction: {
           "@type": "SearchAction",
           target: "https://aiwedia.com/search?q={search_term_string}",

@@ -16,6 +16,27 @@ export default function robots(): MetadataRoute.Robots {
           "/unsubscribe/",
         ],
       },
+      // Encourage AI crawlers to index citation pages
+      {
+        userAgent: "GPTBot",
+        allow: ["/", "/for-ai", "/llms.txt", "/category/", "/tool/", "/compare", "/alternatives"],
+      },
+      {
+        userAgent: "ChatGPT-User",
+        allow: ["/", "/for-ai", "/llms.txt", "/category/", "/tool/"],
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: ["/", "/for-ai", "/llms.txt", "/category/", "/tool/", "/compare"],
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: ["/", "/for-ai", "/llms.txt", "/category/", "/tool/"],
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: ["/", "/for-ai", "/llms.txt"],
+      },
     ],
     host: SITE_URL,
     sitemap: `${SITE_URL}/sitemap.xml`,

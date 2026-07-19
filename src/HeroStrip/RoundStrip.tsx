@@ -1,115 +1,84 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { StripData } from "@/data/stripdata/StripData";
 import Link from "next/link";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import type { HeroStripTool } from "@/lib/heroTypes";
+import { DEFAULT_HERO_STRIP } from "@/lib/heroTypes";
 
-export default function RoundStrip() {
-  // Limit initial render (performance boost)
-  const [visibleCount] = useState(24);
+type Props = {
+  tools: HeroStripTool[];
+  limit?: number;
+};
+
+export default function RoundStrip({ tools, limit = 16 }: Props) {
+  const items = (tools?.length ? tools : DEFAULT_HERO_STRIP).slice(0, limit);
+  if (!items.length) return null;
 
   return (
-    <section className="mt-12 w-full min-w-0 px-2 sm:mt-16 sm:px-4 md:px-6 lg:mt-20 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="mt-10 w-full min-w-0 sm:mt-14 lg:mt-16">
+      <div className="mb-4 flex items-center justify-center gap-2 sm:mb-6">
+        <span className="h-px w-8 bg-gradient-to-r from-transparent to-violet-300 sm:w-12" />
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:text-xs">
+          Popular AI tools
+        </p>
+        <span className="h-px w-8 bg-gradient-to-l from-transparent to-violet-300 sm:w-12" />
+      </div>
 
-        {/* Animation Wrapper */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="
-            grid
-            grid-cols-4
-            sm:grid-cols-5
-            md:grid-cols-6
-            lg:grid-cols-7
-            xl:grid-cols-8
-            gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8
-          "
-        >
-          {StripData.slice(0, visibleCount).map((tool, index) => (
-            <Link
-              key={tool.link} // better key
-              href={tool.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <motion.div
-                whileHover={{ scale: 1.08, y: -6 }}
-                whileTap={{ scale: 0.95 }}
-                className="
-                  flex flex-col items-center text-center
-                  p-3 rounded-xl
-                  bg-white/[0.03]
-                  backdrop-blur-sm
-                  border border-white/5
-                  transition-all duration-300
-                  group-hover:bg-white/[0.06]
-                  group-hover:border-blue-500/30
-                "
+      <motion.ul
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto grid max-w-5xl grid-cols-4 gap-x-2 gap-y-5 sm:grid-cols-5 sm:gap-x-3 sm:gap-y-6 md:grid-cols-6 lg:grid-cols-8"
+      >
+        {items.map((tool, index) => {
+          const internalHref = tool.href?.trim();
+          const externalHref = tool.link?.trim();
+          const href = internalHref || externalHref || "/category/ai-tools";
+          const isExternal = !internalHref && Boolean(externalHref);
+
+          return (
+            <li key={`${tool.title}-${index}`} className="min-w-0">
+              <Link
+                href={href}
+                {...(isExternal
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className="group flex flex-col items-center text-center"
               >
-
-                {/* Image */}
-                <div
-                  className="
-                    relative
-                    w-16 h-16
-                    sm:w-18 sm:h-18
-                    md:w-20 md:h-20
-                    rounded-full
-                    overflow-hidden
-                    border border-white/10
-                    shadow-md
-                    transition-all duration-300
-                    group-hover:border-blue-500
-                    group-hover:shadow-[0_0_25px_rgba(59,130,246,0.6)]
-                  "
+                <motion.div
+                  whileHover={{ y: -4, scale: 1.05 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="relative"
                 >
-                  <Image
-                    src={tool.image}
-                    alt={tool.title}
-                    fill
-                    sizes="
-                      (max-width: 640px) 64px,
-                      (max-width: 768px) 72px,
-                      80px
-                    "
-                    quality={70}
-                    loading={index < 6 ? "eager" : "lazy"} // top items load fast
-                    priority={index < 6} // boost above-the-fold
-                    placeholder="empty"
-                    className="object-cover"
-                  />
-                </div>
+                  <div className="relative h-14 w-14 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm ring-2 ring-white transition duration-300 group-hover:border-violet-300 group-hover:shadow-lg group-hover:shadow-violet-200/50 sm:h-16 sm:w-16 md:h-[4.5rem] md:w-[4.5rem] md:rounded-[1.25rem]">
+                    <Image
+                      src={tool.image}
+                      alt={tool.title}
+                      fill
+                      sizes="(max-width: 640px) 56px, (max-width: 768px) 64px, 72px"
+                      quality={70}
+                      loading={index < 8 ? "eager" : "lazy"}
+                      priority={index < 8}
+                      className="object-cover"
+                    />
+                  </div>
+                  <span className="pointer-events-none absolute -inset-1 -z-10 rounded-3xl bg-gradient-to-br from-violet-400/0 to-fuchsia-400/0 opacity-0 blur-md transition group-hover:from-violet-400/30 group-hover:to-fuchsia-400/20 group-hover:opacity-100" />
+                </motion.div>
 
-                {/* Title */}
-                <p className="
-                  text-[11px] sm:text-xs md:text-sm
-                  text-gray-300 mt-3 font-medium
-                  group-hover:text-white transition
-                ">
+                <p className="mt-2 max-w-[4.75rem] truncate text-[10px] font-bold text-slate-700 transition group-hover:text-violet-700 sm:max-w-[5.5rem] sm:text-xs">
                   {tool.title}
                 </p>
-
-                {/* Description */}
                 {tool.description && (
-                  <p className="
-                    text-[10px] sm:text-[11px]
-                    text-gray-500 mt-1 leading-tight
-                    max-w-[90px]
-                    group-hover:text-gray-300 transition
-                  ">
+                  <p className="mt-0.5 hidden max-w-[5.5rem] truncate text-[9px] text-slate-400 sm:block">
                     {tool.description}
                   </p>
                 )}
-              </motion.div>
-            </Link>
-          ))}
-        </motion.div>
-      </div>
-    </section>
+              </Link>
+            </li>
+          );
+        })}
+      </motion.ul>
+    </div>
   );
 }

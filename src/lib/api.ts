@@ -3,8 +3,15 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { FALLBACK_MENU_CATEGORIES } from "./fallbackMenuCategories";
 import type { CategoryResponse, Tool } from "./types";
+import {
+  DEFAULT_HERO_COPY,
+  DEFAULT_HERO_STRIP,
+  type HeroCopy,
+  type HeroStripTool,
+} from "./heroTypes";
 
 export type { Tool, CategoryResponse } from "./types";
+export type { HeroCopy, HeroStripTool } from "./heroTypes";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -35,6 +42,8 @@ const DEFAULT_SITE_CONFIG: Record<string, unknown> = {
     { name: "AI Directory Hub", href: "/ai-directory" },
     { name: "Web Directory Hub", href: "/web-directory" },
   ],
+  hero_strip_tools: DEFAULT_HERO_STRIP,
+  hero_copy: DEFAULT_HERO_COPY,
 };
 
 async function safeFetchInner<T>(url: string): Promise<T | null> {
@@ -431,6 +440,12 @@ export async function getVerifiedRecentTools(
             categorySlug: string;
             categoryTitle?: string;
             detailPath?: string;
+            launchUrl?: string;
+            url?: string;
+            benefits?: string[];
+            editorScore?: number | null;
+            editorsPick?: boolean;
+            rank?: number;
           }) => ({
             slug: t.slug,
             title: t.title,
@@ -439,6 +454,11 @@ export async function getVerifiedRecentTools(
             categorySlug: t.categorySlug,
             categoryTitle: t.categoryTitle,
             href: t.detailPath || `/tool/${t.categorySlug}/${t.slug}`,
+            launchUrl: t.launchUrl || t.url,
+            benefits: t.benefits || [],
+            editorScore: t.editorScore,
+            editorsPick: t.editorsPick,
+            rank: t.rank,
           })
         );
     }
@@ -456,36 +476,24 @@ export async function getVerifiedRecentTools(
       categorySlug: t.categorySlug || categoryData?.slug || "ai-tools",
       categoryTitle: categoryData?.title ?? "AI Tools",
       href: `/tool/${t.categorySlug || categoryData?.slug || "ai-tools"}/${t.slug}`,
+      launchUrl: t.launchUrl || t.url,
+      benefits: t.benefits || [],
+      editorScore: t.editorScore,
+      editorsPick: t.editorsPick,
+      rank: t.rank,
     }));
   }
 
-  const verified: RecentToolCard[] = [];
-  for (const t of candidates) {
-    const detail = await resolveToolDetail(t.categorySlug, t.slug);
-    if (!detail?.tool) continue;
-    verified.push({
-      slug: detail.tool.slug,
-      title: detail.tool.title,
-      description: detail.tool.description || t.description,
-      image: detail.tool.image || t.image,
-      categorySlug: detail.category.slug,
-      categoryTitle: detail.category.title,
-      href:
-        detail.canonicalPath ||
-        `/tool/${detail.category.slug}/${detail.tool.slug}`,
-      launchUrl: detail.tool.launchUrl || detail.tool.url,
-      benefits: detail.tool.benefits || [],
-      editorScore: detail.tool.editorScore,
-      editorsPick: detail.tool.editorsPick,
-      rank: detail.tool.rank,
-    });
-    if (verified.length >= 8) break;
-  }
+  // Trust /api/tools/recent — skip per-tool detail N+1 (was 6–9s on homepage)
+  const tools = candidates.slice(0, 8).map((t) => ({
+    ...t,
+    href: t.href || `/tool/${t.categorySlug}/${t.slug}`,
+  }));
 
   const subtitle =
-    verified.length > 0
+    tools.length > 0
       ? "Fresh AI tools added to the directory — explore reviews and launch links"
       : "";
 
-  return { tools: verified, subtitle };
+  return { tools, subtitle };
 }

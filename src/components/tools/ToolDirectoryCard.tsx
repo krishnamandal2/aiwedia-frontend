@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import SafeToolImage from "@/components/tools/SafeToolImage";
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, Star } from "lucide-react";
 import { trackOutboundLink } from "@/lib/analytics";
@@ -42,12 +42,13 @@ export default function ToolDirectoryCard({
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:border-violet-300 hover:shadow-md">
       <div className="relative aspect-[16/10] border-b border-slate-100 bg-slate-50">
         {hasImage ? (
-          <Image
-            src={tool.image!}
+          <SafeToolImage
+            src={tool.image}
             alt={tool.title}
             fill
             className="object-cover"
             sizes="(max-width:768px) 100vw, 33vw"
+            fallbackClassName="flex h-full w-full items-center justify-center bg-slate-100 text-2xl font-black text-violet-300"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-2xl font-black text-violet-200">
